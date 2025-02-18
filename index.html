@@ -1,377 +1,353 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب معدل السداسي</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Roboto:wght@400;700&display=swap">
+    <title>موقع طالب ST - الفصل الثاني</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root {
-    --background-color: #121212;
-    --text-color: white;
-    --border-color-save: #4E6A56;
-    --hover-background-save: #4E6A56;
-    --border-color-reset: #6D2020;
-    --hover-background-reset: #6D2020;
-    --border-color: #333;
-       --surface-color: #1e1e1e;
-       --input-background: #222;
-}
+             :root { 
+            --background-color: white;
+            --text-color: #000;
+            --surface-color: #f5f5f5;
+            --button-background: #e0e0e0;
+            --button-hover: #d0d0d0;
+            --border-color: #cccccc;
+            --primary-color: #8DC891;
+            --secondary-color: #C88D8D;
+            
+        }
 
-/* الوضع الفاتح */
-.light-mode {
-    --background-color: white;
-    --text-color: #000;
-    --border-color-save: #8DC891;
-    --hover-background-save: #8DC891;
-    --border-color-reset: #cc0000;
-    --hover-background-reset: #C88D8D;
-}
+       .light-mode {
+            
+            --background-color: #121212;
+            --text-color: white;
+            --surface-color: #1e1e1e;
+            --button-background: #282828;
+            --button-hover: #3a3a3a;
+            --border-color: #333;
+            --primary-color: #4E6A56;
+            --secondary-color: #6D2020;
+            --accent-color: #037500;
+        }
 
-/* تطبيق المتغيرات على الأزرار */
-#saveButton {
-    background: var(--surface-color);
-color: var(--text-color);
-border: 1.1px solid var(--border-color-save);
-font-weight: 500;
-}
-
-#saveButton:active {
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-}
-#saveButton:hover {
-    background: var(--hover-background-save);
-}
-
-#resetButton {
-    background: var(--surface-color);
-    color: var(--text-color);
-    border: 1.1px solid var(--border-color-reset);
-    font-weight: 500;
-}
-#resetButton:active {
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-}
-#resetButton:hover {
-    background: var(--hover-background-reset);
-} 
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: var(--background-color);
-            color: var(--text-color);
-            text-align: center;
+        * {
             margin: 0;
             padding: 0;
-            user-select: none;
-            transition: background-color 0.3s ease;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
         }
-        .container {
-            width: 90%;
-            max-width: 600px;
-            background: var(--surface-color);
-            padding: 20px;
-            margin: 50px auto;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        h1, h2, p{
+
+        body {
+            background: var(--background-color);
             color: var(--text-color);
-            font-family: 'Tajawal', 'Roboto', sans-serif;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
         }
-        .grades-table {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            text-align: right;
+
+        .header {
+            padding: 20px;
+            background: var(--surface-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .grade-input {
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent-color);
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+            width: 40px;
+            height: 40px;
+            cursor: default;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: var(--input-background);
-            padding: 8px 12px;
-            border-radius: 5px;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: var(--background-color);
+        }
+
+        main {
+            flex-grow: 1;
+            padding: 30px 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            background: var(--surface-color);
             border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
             transition: all 0.3s ease;
+            cursor: default;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        .grade-input:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: var(--button-hover);
         }
-        .grade-input input {
-            width: 50px;
-            background: transparent;
-            border: none;
+
+        .grid-item i {
+            font-size: 36px;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .grid-item span {
+            color: var(--text-color);
+            font-size: 16px;
+            font-weight: thin;
+            position: relative;
+            top: 10px;
+        }
+
+        footer {
+            background: var(--surface-color);
             color: var(--text-color);
             text-align: center;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            border-radius: 4px;
+            padding: 20px;
+            margin-top: 40px;
         }
-        .grade-input input:focus {
-            outline: none;
-            background: rgba(255,255,255,0.1);
-        }
-        button {
-    background: var(--surface-color);
-    color: var(--text-color);
-    border: 0.9px solid #28a745;
-    padding: 12px;
-    cursor: default;
-    margin-top: 15px;
-    font-size: 1.1em;
-    border-radius: 5px;
-    width: 100%;
-    font-family: 'Tajawal', sans-serif;
-    font-weight: 700;
-    transition: background 0.3s ease, transform 0.3s ease; /* التأثير على الخلفية والتحويل */
-}
 
-        button:hover {
-            background: #28a745;
-            transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0,0,0,1);
-        }
-        h2#result {
-            margin-top: 15px;
-            font-size: 1.5em;
-            padding: 10px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            font-family: 'Tajawal', 'Roboto', sans-serif;
-        }
-        .red { color: #ff4d4d; }
-        .green { color: #4caf50; }
-        .yellow { color: #ffd700; }
-
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
-        .action-buttons button {
-            width: 48%;
-        }
-        
-        #saveButton:hover, #resetButton:hover {
-            opacity: 0.9;
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #aaa;
-        }
         footer a {
-            color: var(--primary-color);
+            color: var(--accent-color);
             text-decoration: none;
-            transition: color 0.3s ease;
+            font-weight: thin;
         }
+
         footer a:hover {
-            color: var(--secondary-color);
+            text-decoration: underline;
         }
-        
-        #themeToggle {
-    position: relative;  /* تثبيت العنصر بالنسبة للشاشة */
-    top: 0;           /* وضع العنصر في أعلى الصفحة */
-    right: 0;         /* وضع العنصر في أقصى اليمين */
-    float: right;     /* هذه خاصية لا تؤثر كثيرًا هنا ولكن يمكن الإبقاء عليها */
-    background: transparent;
-    color: var(--text-color);
-    border: 0.9px solid var(--border-color-save);
-    width: 40px;
-    height: 40px;
-    cursor: default;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 1000; /* لضمان أن الزر يبقى في أعلى العناصر الأخرى */
-}
-        #themeToggle:hover {
-            background: var(--primary-color);
-            transform: scale(1.1);
+
+        .countdown {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        #themeToggle svg {
-            width: 24px;
-            height: 24px;
+
+        .countdown h2 {
+            color: var(--text-color);
+            margin-bottom: 15px;
         }
-        .dark-theme #themeToggle {
-            box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
-        .dark-theme {
-            --background-color: #f0f0f0;
-            --surface-color: #ffffff;
-            --text-color: #333333;
-            --input-background: #e0e0e0;
-            --border-color: #cccccc;
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .countdown-label {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .header-title {
+                font-size: 20px;
+            }
+            .countdown-timer {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
 <body>
-    
-    <div class="container">
-    	<button id="themeToggle" aria-label="تبديل السمة">
-        <i data-lucide="sun"></i>
-    </button>
-        <h1>حساب معدل الفصل</h1>
-        <form id="gradeForm">
-            <div class="grades-table">
-                <label class="grade-input">Math (TD):<input type="number" id="math_td" min="0" max="20" step="0.25"></label>
-                <label class="grade-input">MATH (EXAMEN):<input type="number" id="math_exam" min="0" max="20" step="0.25"></label>
-                
-                <label class="grade-input">PHYSIC (TD):<input type="number" id="phys_td" min="0" max="20" step="0.25"></label>
-                <label class="grade-input">PHYSIC (EXAMEN):<input type="number" id="phys_exam" min="0" max="20" step="0.25"></label>
-                
-                <label class="grade-input">CHIMIE (TD):<input type="number" id="chem_td" min="0" max="20" step="0.25"></label>
-                <label class="grade-input">CHIMIE (EXAMEN):<input type="number" id="chem_exam" min="0" max="20" step="0.25"></label>
-                
-                <label class="grade-input">INFO (TP):<input type="number" id="cs_tp" min="0" max="20" step="0.25"></label>
-                <label class="grade-input">INFO (EXAMEN):<input type="number" id="cs_exam" min="0" max="20" step="0.25"></label>
-                
-                <label class="grade-input">TP CHIMIE:<input type="number" id="tp_chem" min="0" max="20" step="0.25"></label>
-                <label class="grade-input">TP PHYSIC:<input type="number" id="tp_phys" min="0" max="20" step="0.25"></label>
-                
-                <label class="grade-input">MST:<input type="number" id="mst" min="0" max="20" step="0.25"></label>
-                <label class="grade-input">EDD:<input type="number" id="edd" min="0" max="20" step="0.25"></label>
-                
-                <label class="grade-input">METHODOLOGY:<input type="number" id="methodology" min="0" max="20" step="0.25"></label>
-                <label class="grade-input">ENGLISH:<input type="number" id="english" min="0" max="20" step="0.25"></label>
+    <header class="header">
+        <div class="header-title">ST BLIDA L1 2024/2025</div>
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل السمة">
+            <i data-lucide="sun"></i>
+        </button>
+    </header>
+
+    <main>
+        <div class="grid-container">
+            <div class="grid-item" onclick="window.location.href='S2.html';">
+                <i data-lucide="calendar"></i>
+                <span>جدول توقيت S2</span>
             </div>
-            <button type="button" onclick="calculateAverage()">حساب المعدل</button>
-        </form>
-        <h2 id="result" class="green">المعدل: --</h2>
-        <div class="action-buttons">
-            <button id="saveButton" onclick="saveData()">حفظ النقاط</button>
-            <button id="resetButton" onclick="resetData()">إعادة تعيين</button>
+            <div class="grid-item" onclick="window.location.href='moy.html';">
+                <i data-lucide="calculator"></i>
+                <span>حاسبة المعدل</span>
+            </div>
+            <div class="grid-item" onclick="window.location.href='moy.html';">
+                <i data-lucide="youtube"></i>
+                <span>قنوات يوتيوب للدراسة</span>
+            </div>
+            <div class="grid-item" onclick="window.location.href='s2-schedule.html';">
+                <i data-lucide="file"></i>
+                <span>ملفات جوجل درايف</span>
+            </div>
+            <div class="grid-item" onclick="window.location.href='s2-schedule.html';">
+                <i data-lucide="message-circle"></i>
+                <span>قنوات تلجرام مفيدة</span>
+            </div>
+            <div class="grid-item" onclick="window.location.href='s2-schedule.html';">
+                <i data-lucide="book-open"></i>
+                <span>مصادر تعليمية</span>
+            </div>
+            <div class="grid-item" onclick="window.location.href='s2-schedule.html';">
+                <i data-lucide="clock"></i>
+                <span>مواعيد الاختبارات</span>
+            </div>
+            <div class="grid-item" onclick="window.location.href='s2-schedule.html';">
+                <i data-lucide="users"></i>
+                <span>مجموعات الدراسة</span>
+            </div>
         </div>
-    </div>
+
+        <div class="countdown">
+            <h2>العد التنازلي لبدء الاختبارات</h2>
+            <div class="countdown-timer">
+                <div class="countdown-item">
+                    <span class="countdown-value" id="seconds">00</span>
+                    <span class="countdown-label">ثانية</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="minutes">00</span>
+                    <span class="countdown-label">دقيقة</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="hours">00</span>
+                    <span class="countdown-label">ساعة</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-value" id="days">00</span>
+                    <span class="countdown-label">يوم</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <footer>
         <p>made by <a href="https://t.me/rewx_x" target="_blank" style="color: #28a745; cursor: default; text-decoration: none; font-family: 'Tajawal', sans-serif;">@rewx_x</a></p>
     </footer>
+
     <script>
-        // دالة لحساب المعدل بدون حفظ تلقائي
-function calculateAverage() {
-    function getValue(id) {
-        return parseFloat(document.getElementById(id).value) || 0;
-    }
+        window.onload = function () {
+    // تفعيل أيقونات Lucide
+    lucide.createIcons();
 
-    let math = getValue("math_td") * 0.4 + getValue("math_exam") * 0.6;
-    let phys = getValue("phys_td") * 0.4 + getValue("phys_exam") * 0.6;
-    let chem = getValue("chem_td") * 0.4 + getValue("chem_exam") * 0.6;
-    let cs = getValue("cs_tp") * 0.4 + getValue("cs_exam") * 0.6;
-
-    let sum = (math * 3) + (phys * 3) + (chem * 3) + (cs * 2) + 
-              getValue("tp_chem") + getValue("tp_phys") + 
-              getValue("mst") + getValue("edd") + getValue("methodology") + getValue("english");
-
-    let average = sum / 17;
-
-    let resultElement = document.getElementById("result");
-    resultElement.innerText = "المعدل: " + average.toFixed(2);
-    
-    if (average < 10) {
-        resultElement.className = "red";
-    } else if (average < 12) {
-        resultElement.className = "yellow";
-    } else {
-        resultElement.className = "green";
-    }
-}
-
-// دالة لحفظ البيانات يدويًا
-function saveData() {
-    let inputs = document.querySelectorAll(".grades-table input");
-    inputs.forEach(input => {
-        localStorage.setItem(input.id, input.value);
-    });
-    showNotification("تم حفظ النقاط بنجاح");
-}
-
-// دالة لإعادة تعيين البيانات
-function resetData() {
-    if (confirm("هل أنت متأكد من رغبتك في إعادة تعيين جميع القيم؟")) {
-        localStorage.clear();
-        document.querySelectorAll(".grades-table input").forEach(input => {
-            input.value = "";
-        });
-        document.getElementById("result").innerText = "المعدل: --";
-        document.getElementById("result").className = "green";
-        showNotification("تم إعادة تعيين جميع القيم");
-    }
-}
-
-// دالة لإظهار إشعار
-function showNotification(message) {
-    let notification = document.createElement("div");
-    notification.textContent = message;
-    notification.style.position = "fixed";
-    notification.style.bottom = "20px";
-    notification.style.left = "50%";
-    notification.style.transform = "translateX(-50%)";
-    notification.style.backgroundColor = "rgba(40, 167, 69, 0.9)";
-    notification.style.color = "white";
-    notification.style.padding = "10px 20px";
-    notification.style.borderRadius = "5px";
-    notification.style.transition = "opacity 0.5s";
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-        notification.style.opacity = "0";
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 500);
-    }, 3000);
-}
-
-// تحميل البيانات المحفوظة
-window.onload = function() {
-    let inputs = document.querySelectorAll(".grades-table input");
-    inputs.forEach(input => {
-        if (localStorage.getItem(input.id) !== null) {
-            input.value = localStorage.getItem(input.id);
+    // وظيفة تبديل الوضع
+    function toggleTheme() {
+        document.documentElement.classList.toggle("light-mode");
+        const icon = document.querySelector(".theme-toggle i");
+        
+        if (document.documentElement.classList.contains("light-mode")) {
+            icon.setAttribute("data-lucide", "moon");
+        } else {
+            icon.setAttribute("data-lucide", "sun");
         }
+        
+        lucide.createIcons();
+        localStorage.setItem('theme', document.documentElement.classList.contains("light-mode") ? 'light' : 'dark');
+    }
+
+    // إضافة حدث عند الضغط على زر التبديل
+    document.querySelector(".theme-toggle").addEventListener("click", toggleTheme);
+
+    // استرجاع السمة المحفوظة في localStorage
+    if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.classList.add('light-mode');
+        document.querySelector(".theme-toggle i").setAttribute("data-lucide", "moon");
+        lucide.createIcons();
+    }
+
+    // إضافة تأثير عند الضغط على عناصر الشبكة
+    document.querySelectorAll('.grid-item').forEach(item => {
+        item.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95) translateY(-2px)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+        });
     });
 
-    // إضافة مستمع حدث للحفظ عند الضغط على زر الحفظ
-    document.getElementById("saveButton").addEventListener('click', saveData);
+    // ضبط العد التنازلي
+    const countDownDate = new Date("May 5, 2025 00:00:00").getTime();
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        if (document.getElementById("days")) {
+            document.getElementById("days").textContent = days.toString().padStart(2, '0');
+            document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+        }
+
+        if (distance < 0) {
+            clearInterval(countdownTimer);
+            document.querySelector(".countdown-timer").innerHTML = "بدأت الاختبارات!";
+        }
+    }
+
+    updateCountdown();
+    const countdownTimer = setInterval(updateCountdown, 1000);
 };
-
-// وظيفة تبديل السمة
-const themeToggle = document.getElementById('themeToggle');
-const icon = themeToggle.querySelector('i');
-
-function updateThemeIcon() {
-    if (document.body.classList.contains('dark-theme')) {
-        icon.setAttribute('data-lucide', 'moon');  // تعيين أيقونة القمر
-    } else {
-        icon.setAttribute('data-lucide', 'sun');  // تعيين أيقونة الشمس
-    }
-    lucide.createIcons();  // إعادة تحميل الأيقونات
-}
-
-themeToggle.addEventListener('click', function() {
-    document.body.classList.toggle('dark-theme');
-    updateThemeIcon();  // تحديث الأيقونة بعد التبديل
-    if (document.body.classList.contains('dark-theme')) {
-        localStorage.setItem('theme', 'dark');
-    } else {
-        localStorage.setItem('theme', 'light');
-    }
-});
-
-// تحقق من السمة المحفوظة عند تحميل الصفحة
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark-theme');
-}
-updateThemeIcon();
-
-// تهيئة الأيقونات
-lucide.createIcons();
     </script>
 </body>
 </html>
-
