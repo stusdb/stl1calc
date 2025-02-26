@@ -1,274 +1,538 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جداول التوقيت - بوابة طالب ST</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap">
+    <title>حساب معدل السداسي</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Roboto:wght@400;700&display=swap">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
+    <style> 
         :root {
-            --background-color: #121212;
-            --text-color: white;
-            --surface-color: #1e1e1e;
-            --border-color-save: #4E6A56;
-            --button-background: #282828;
-            --button-hover: #3a3a3a;
-            --border-color: #333;
-            --primary-color: #28a745;
-            --secondary-color: #6D2020;
-        }
+    --background-color: #121212;
+    --text-color: white;
+    --border-color-save: #4E6A56;
+    --hover-background-save: #4E6A56;
+    --border-color-reset: #6D2020;
+    --hover-background-reset: #6D2020;
+    --border-color: #333;
+       --surface-color: #1e1e1e;
+       --input-background: #222;
+}
 
-        .light-mode {
-            --background-color: #f0f4f8;
-                --border-color-save: #8DC891;
-            --text-color: #333;
-            --surface-color: #ffffff;
-            --button-background: #ffffff;
-            --button-hover: #f5f5f5;
-            --border-color: #eaeaea;
-        }
+/* الوضع الفاتح */
+.light-mode {
+    --background-color: white;
+    --text-color: #000;
+    --border-color-save: #8DC891;
+    --hover-background-save: #8DC891;
+    --border-color-reset: #cc0000;
+    --hover-background-reset: #C88D8D;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Tajawal', sans-serif;
-        }
+/* تطبيق المتغيرات على الأزرار */
+#saveButton {
+    background: var(--surface-color);
+color: var(--text-color);
+border: 1.1px solid var(--border-color-save);
+font-weight: 500;
+}
 
+#saveButton:active {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+}
+#saveButton:hover {
+    background: var(--hover-background-save);
+}
+
+#resetButton {
+    background: var(--surface-color);
+    color: var(--text-color);
+    border: 1.1px solid var(--border-color-reset);
+    font-weight: 500;
+}
+#resetButton:active {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+}
+#resetButton:hover {
+    background: var(--hover-background-reset);
+} 
         body {
+            font-family: 'Tajawal', sans-serif;
             background: var(--background-color);
             color: var(--text-color);
-            min-height: 100vh;
-            transition: background 0.3s ease, color 0.3s ease;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            transition: background-color 0.3s ease;
         }
-
         .container {
             width: 90%;
-            max-width: 1200px;
-            margin: 2rem auto;
+            max-width: 600px;
             background: var(--surface-color);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
-
-     .header {
-            position: relative; /* إضافة */
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
-            overflow: hidden; /* إضافة */
-        }
-
-        .header-buttons {
-            float: left; /* استخدام float بدلاً من flex */
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .header-title {
-            text-align: center;
-            font-size: 1.6rem;
-            position: position; 
-            margin-top: 8px; 
-            font-weight: 600;
-            color: var(--primary-color);
-        } 
-        .theme-toggle, .back-button {
-            background: transparent;
-            border: 0.9px solid var(--border-color-save);
+        h1, h2, p{
             color: var(--text-color);
-            cursor: default;
-            padding: 0.5rem;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-family: 'Tajawal', 'Roboto', sans-serif;
         }
-
-        .theme-toggle:hover, .back-button:hover {
-            background: var(--button-hover);
-            transform: scale(1.1);
-        }
-
-     
-        .grid-container {
+        .grades-table {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            text-align: right;
         }
-
-        .grid-item {
-            background: var(--button-background);
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            padding: 3rem;
-            text-align: center;
-            transition: all 0.3s ease;
+        .grade-input {
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: space-between;
+            background: var(--input-background);
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
-
-        .grid-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        .grade-input:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(255,255,255,0.1);
         }
-
-        .grid-item img {
-            max-width: 140%;
-            height: auto;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .grid-item h3 {
-            color: var(--text-color);
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .download-btn {
-            background: var(--primary-color);
-            color: white;
+        .grade-input input {
+            width: 40px;
+            background: transparent;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.25rem;
-            cursor: default;
-            transition: background 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-        }
-
-        .download-btn:hover {
-            background: #218838;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1rem;
-            margin-top: 2rem;
             color: var(--text-color);
+            text-align: center;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            border-radius: 4px;
         }
+        .grade-input input:focus {
+            outline: none;
+            background: rgba(255,255,255,0.1);
+        }
+        button {
+    background: var(--surface-color);
+    color: var(--text-color);
+    border: 0.9px solid #28a745;
+    padding: 12px;
+    cursor: default;
+    margin-top: 15px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    width: 100%;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    transition: background 0.3s ease, transform 0.3s ease; /* التأثير على الخلفية والتحويل */
+}
 
+        button:hover {
+            background: #28a745;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,1);
+        }
+        h2#result {
+            margin-top: 15px;
+            font-size: 1.5em;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-family: 'Tajawal', 'Roboto', sans-serif;
+        }
+        .red { color: #ff4d4d; }
+        .green { color: #4caf50; }
+        .yellow { color: #ffd700; }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .action-buttons button {
+            width: 48%;
+        }
+        
+        #saveButton:hover, #resetButton:hover {
+            opacity: 0.9;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #aaa;
+        }
         footer a {
             color: var(--primary-color);
             text-decoration: none;
+            transition: color 0.3s ease;
         }
-
         footer a:hover {
-            text-decoration: underline;
+            color: var(--secondary-color);
         }
-
-        @media (max-width: 768px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        
+        #themeToggle {
+    position: position;  /* تثبيت العنصر بالنسبة للشاشة */
+    top: 0;           /* وضع العنصر في أعلى الصفحة */
+    right: 0;         /* وضع العنصر في أقصى اليمين */
+    float: left;     /* هذه خاصية لا تؤثر كثيرًا هنا ولكن يمكن الإبقاء عليها */
+    background: transparent;
+    color: var(--text-color);
+    border: 0.9px solid var(--border-color-save);
+    width: 40px;
+    height: 40px;
+    cursor: default;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000; /* لضمان أن الزر يبقى في أعلى العناصر الأخرى */
+}
+        #themeToggle:hover {
+            background: var(--primary-color);
+            transform: scale(1.1);
         }
-
-        @media (max-width: 480px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
+        #themeToggle svg {
+            width: 24px;
+            height: 24px;
+        }
+        .dark-theme #themeToggle {
+            box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+        }
+        .dark-theme {
+            --background-color: #f0f0f0;
+            --surface-color: #ffffff;
+            --text-color: #333333;
+            --input-background: #e0e0e0;
+            --border-color: #cccccc;
         }
     </style>
 </head>
 <body>
+    
     <div class="container">
-        <header class="header">
-            <div class="header-buttons">
-                <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل السمة">
-                    <i data-lucide="sun" aria-hidden="true"></i>
-                </button>
-                <button class="back-button" onclick="goBack()" aria-label="رجوع للصفحة الرئيسية">
-                    <i data-lucide="arrow-left" aria-hidden="true"></i>
-                </button>
+    	<button id="themeToggle" aria-label="تبديل السمة">
+        <i data-lucide="sun"></i>
+    </button>
+        <h1>حساب معدل الفصل</h1>
+        <form id="gradeForm">
+            <div class="grades-table">
+                <label class="grade-input">Math (TD):<input type="number" id="math_td" min="0" max="20" step="0.25"></label>
+                <label class="grade-input">MATH (EXAMEN):<input type="number" id="math_exam" min="0" max="20" step="0.25"></label>
+                
+                <label class="grade-input">PHYSIC (TD):<input type="number" id="phys_td" min="0" max="20" step="0.25"></label>
+                <label class="grade-input">PHYSIC (EXAMEN):<input type="number" id="phys_exam" min="0" max="20" step="0.25"></label>
+                
+                <label class="grade-input">CHIMIE (TD):<input type="number" id="chem_td" min="0" max="20" step="0.25"></label>
+                <label class="grade-input">CHIMIE (EXAMEN):<input type="number" id="chem_exam" min="0" max="20" step="0.25"></label>
+                
+                <label class="grade-input">INFO (TP):<input type="number" id="cs_tp" min="0" max="20" step="0.25"></label>
+                <label class="grade-input">INFO (EXAMEN):<input type="number" id="cs_exam" min="0" max="20" step="0.25"></label>
+                
+                <label class="grade-input">TP CHIMIE:<input type="number" id="tp_chem" min="0" max="20" step="0.25"></label>
+                <label class="grade-input">TP PHYSIC:<input type="number" id="tp_phys" min="0" max="20" step="0.25"></label>
+                
+                <label class="grade-input">MST:<input type="number" id="mst" min="0" max="20" step="0.25"></label>
+                <label class="grade-input">EDD:<input type="number" id="edd" min="0" max="20" step="0.25"></label>
+                
+                <label class="grade-input">METHODOLOGY:<input type="number" id="methodology" min="0" max="20" step="0.25"></label>
+                <label class="grade-input">ENGLISH:<input type="number" id="english" min="0" max="20" step="0.25"></label>
             </div>
-            <div class="header-title">جداول التوقيت S2</div>
-        </header>
-        
-        
-        <main class="grid-container">
-            <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/A.jpg" >
-                <h3>Section A</h3>
-                <a href="A.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
-                </a>
-            </div>
-            <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/B.jpg" >
-                <h3>Section B</h3>
-                <a href="B.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
-                </a>
-            </div>
-            <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/C.jpg" >
-                <h3>Section C</h3>
-                <a href="C.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
-                </a>
-            </div>
-            <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/D.jpg" >
-                <h3>Section D</h3>
-                <a href="D.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
-                </a>
-            </div>
-        
-    
-    <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/E.jpg" >
-                <h3>Section E</h3>
-                <a href="E.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
-                </a>
-            </div>
-        
-    
-    <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/F.jpg" >
-                <h3>Section F</h3>
-                <a href="F.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
-                </a>
-            </div>
-        </main>
+            <button type="button" onclick="calculateAverage()">حساب المعدل</button>
+        </form>
+        <h2 id="result" class="green">المعدل: --</h2>
+        <!-- Add this table structure right after the h2#result element in your HTML -->
+<div class="results-table" id="detailed-results" style="display: none;">
+    <div class="header-row">
+        <div class="module-header">Module</div>
+        <div class="coef-header">Coef</div>
+        <div class="acquired-credit-header">Credit</div>
+        <div class="average-header">Average</div>
     </div>
+    <div id="results-content"></div>
+</div>
 
+<!-- Add this CSS to your existing style section -->
+<style>
+.results-table {
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.header-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 10px;
+    background: var(--surface-color);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: bold;
+}
+
+.result-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.module-average {
+    font-weight: bold;
+}
+
+.passing-grade {
+    color: #28a745;
+}
+
+.failing-grade {
+    color: #dc3545;
+}
+
+.ue-row {
+    background: rgba(40, 167, 69, 0.1);
+    font-weight: bold;
+}
+</style>
+
+<!-- Modify your calculateAverage() function in the script section -->
+<script>
+function calculateAverage() {
+    function getValue(id) {
+        return parseFloat(document.getElementById(id).value) || 0;
+    }
+
+    let modules = {
+        math: {
+            name: "Mathématique 1",
+            average: getValue("math_td") * 0.4 + getValue("math_exam") * 0.6,
+            coef: 3,
+            credit: 6
+        },
+        phys: {
+            name: "Physique 1",
+            average: getValue("phys_td") * 0.4 + getValue("phys_exam") * 0.6,
+            coef: 3,
+            credit: 6
+        },
+        chem: {
+            name: "Structure de la matière",
+            average: getValue("chem_td") * 0.4 + getValue("chem_exam") * 0.6,
+            coef: 3,
+            credit: 6
+        },
+        cs: {
+            name: "Informatique 1",
+            average: getValue("cs_tp") * 0.4 + getValue("cs_exam") * 0.6,
+            coef: 2,
+            credit: 4
+        },
+        tp_chem: {
+            name: "TP Chimie 1",
+            average: getValue("tp_chem"),
+            coef: 1,
+            credit: 2
+        },
+        tp_phys: {
+            name: "TP Physique 1",
+            average: getValue("tp_phys"),
+            coef: 1,
+            credit: 2
+        },
+        mst: {
+            name: "Les métiers en sciences et Technologies 1",
+            average: getValue("mst"),
+            coef: 1,
+            credit: 1
+        },
+        methodology: {
+            name: "Méthodologie de la rédaction",
+            average: getValue("methodology"),
+            coef: 1,
+            credit: 1
+        },
+        english: {
+            name: "Langue Anglaise 1",
+            average: getValue("english"),
+            coef: 1,
+            credit: 1
+        },
+        edd: {
+            name: "Dimension éthique et déontologique",
+            average: getValue("edd"),
+            coef: 1,
+            credit: 1
+        }
+    };
+
+    let totalPoints = 0;
+    let totalCoef = 0;
+    let totalCredits = 0;
+    let acquiredCredits = 0;
+    
+    for (let module in modules) {
+        totalPoints += modules[module].average * modules[module].coef;
+        totalCoef += modules[module].coef;
+        totalCredits += modules[module].credit;
+    }
+    
+    let average = totalPoints / totalCoef;
+
+    // حساب الكريدي المكتسب
+    if (average >= 10) {
+        acquiredCredits = totalCredits;
+    } else {
+        for (let module in modules) {
+            if (modules[module].average >= 10) {
+                acquiredCredits += modules[module].credit;
+            }
+        }
+    }
+
+    // تحديث عرض النتيجة
+    let resultElement = document.getElementById("result");
+    resultElement.innerHTML = `Average Semestre : <span class="${average < 10 ? 'red' : average < 12 ? 'yellow' : 'green'}">${average.toFixed(2)}</span>`;
+
+    // عرض النتائج التفصيلية
+    let detailedResults = document.getElementById("detailed-results");
+    let resultsContent = document.getElementById("results-content");
+    detailedResults.style.display = "block";
+    
+    resultsContent.innerHTML = "";
+    
+    // إضافة صف المعدل الفصلي والكريدي المكتسب
+    resultsContent.innerHTML += `
+        <div class="result-row ue-row">
+            <div style="color: #006400;">Semester Grade</div>
+            <div>${totalCoef}</div>
+            <div>${acquiredCredits}</div>
+            <div class="${average < 10 ? 'failing-grade' : 'passing-grade'}">${average.toFixed(2)}</div>
+        </div>
+    `;
+
+    // إضافة كل مادة
+    for (let module in modules) {
+        let moduleAcquiredCredits = (average >= 10 || modules[module].average >= 10) ? modules[module].credit : 0;
+        resultsContent.innerHTML += `
+            <div class="result-row">
+                <div>${modules[module].name}</div>
+                <div>${modules[module].coef}</div>
+                <div>${moduleAcquiredCredits}</div>
+                <div class="module-average ${modules[module].average >= 10 ? 'passing-grade' : 'failing-grade'}">
+                    ${modules[module].average.toFixed(2)}
+                </div>
+            </div>
+        `;
+    }
+}
+</script>
+        <div class="action-buttons">
+            <button id="saveButton" onclick="saveData()">حفظ النقاط</button>
+            <button id="resetButton" onclick="resetData()">إعادة تعيين</button>
+        </div>
+        
+    </div>
     <footer>
         <p>made by <a href="https://t.me/rewx_x" target="_blank" style="color: #28a745; cursor: default; text-decoration: none; font-family: 'Tajawal', sans-serif;">@rewx_x</a></p>
     </footer>
-
     <script>
-        lucide.createIcons();
+        // دالة لحساب المعدل بدون حفظ تلقائي
 
-        function toggleTheme() {
-            document.body.classList.toggle("light-mode");
-            const icon = document.querySelector(".theme-toggle i");
-            if (document.body.classList.contains("light-mode")) {
-                icon.setAttribute("data-lucide", "moon");
-            } else {
-                icon.setAttribute("data-lucide", "sun");
-            }
-            lucide.createIcons();
-        }
 
-        function goBack() {
-            window.location.href = 'https://stusdb.github.io/stl1calc/'; // تغيير هذا إلى عنوان URL الصفحة الرئيسية الفعلي
+// دالة لحفظ البيانات يدويًا
+function saveData() {
+    let inputs = document.querySelectorAll(".grades-table input");
+    inputs.forEach(input => {
+        localStorage.setItem(input.id, input.value);
+    });
+    showNotification("تم حفظ النقاط بنجاح");
+}
+
+// دالة لإعادة تعيين البيانات
+function resetData() {
+    if (confirm("هل أنت متأكد من رغبتك في إعادة تعيين جميع القيم؟")) {
+        localStorage.clear();
+        document.querySelectorAll(".grades-table input").forEach(input => {
+            input.value = "";
+        });
+        document.getElementById("result").innerText = "المعدل: --";
+        document.getElementById("result").className = "green";
+        showNotification("تم إعادة تعيين جميع القيم");
+    }
+}
+
+// دالة لإظهار إشعار
+function showNotification(message) {
+    let notification = document.createElement("div");
+    notification.textContent = message;
+    notification.style.position = "fixed";
+    notification.style.bottom = "20px";
+    notification.style.left = "50%";
+    notification.style.transform = "translateX(-50%)";
+    notification.style.backgroundColor = "rgba(40, 167, 69, 0.9)";
+    notification.style.color = "white";
+    notification.style.padding = "10px 20px";
+    notification.style.borderRadius = "5px";
+    notification.style.transition = "opacity 0.5s";
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.opacity = "0";
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 500);
+    }, 3000);
+}
+
+// تحميل البيانات المحفوظة
+window.onload = function() {
+    let inputs = document.querySelectorAll(".grades-table input");
+    inputs.forEach(input => {
+        if (localStorage.getItem(input.id) !== null) {
+            input.value = localStorage.getItem(input.id);
         }
+    });
+
+    // إضافة مستمع حدث للحفظ عند الضغط على زر الحفظ
+    document.getElementById("saveButton").addEventListener('click', saveData);
+};
+
+// وظيفة تبديل السمة
+const themeToggle = document.getElementById('themeToggle');
+const icon = themeToggle.querySelector('i');
+
+function updateThemeIcon() {
+    if (document.body.classList.contains('dark-theme')) {
+        icon.setAttribute('data-lucide', 'moon');  // تعيين أيقونة القمر
+    } else {
+        icon.setAttribute('data-lucide', 'sun');  // تعيين أيقونة الشمس
+    }
+    lucide.createIcons();  // إعادة تحميل الأيقونات
+}
+
+themeToggle.addEventListener('click', function() {
+    document.body.classList.toggle('dark-theme');
+    updateThemeIcon();  // تحديث الأيقونة بعد التبديل
+    if (document.body.classList.contains('dark-theme')) {
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+});
+
+// تحقق من السمة المحفوظة عند تحميل الصفحة
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-theme');
+}
+updateThemeIcon();
+
+// تهيئة الأيقونات
+lucide.createIcons();
     </script>
 </body>
 </html>
+

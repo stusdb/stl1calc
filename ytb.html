@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>جداول التوقيت - بوابة طالب ST</title>
+    <title>قنوات يوتيوب تعليمية - بوابة طالب ST</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -11,21 +11,21 @@
             --background-color: #121212;
             --text-color: white;
             --surface-color: #1e1e1e;
-            --border-color-save: #4E6A56;
             --button-background: #282828;
             --button-hover: #3a3a3a;
             --border-color: #333;
             --primary-color: #28a745;
             --secondary-color: #6D2020;
-        } 
+            --border-color-save: #4E6A56;
+        }
 
         .light-mode {
             --background-color: #f0f4f8;
-                --border-color-save: #8DC891;
             --text-color: #333;
             --surface-color: #ffffff;
             --button-background: #ffffff;
             --button-hover: #f5f5f5;
+            --border-color-save: #8DC891;
             --border-color: #eaeaea;
         }
 
@@ -53,28 +53,21 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-     .header {
+        .header {
             position: relative; /* إضافة */
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid var(--border-color);
             overflow: hidden; /* إضافة */
         }
-
-        .header-buttons {
-            float: left; /* استخدام float بدلاً من flex */
-            display: flex;
-            gap: 0.5rem;
+        .header-title {
+            font-size: 1.4rem;
+            position: position; 
+            margin-top: 15px; 
+            font-weight: bold;
+            color: var(--primary-color);
         }
 
-        .header-title {
-            text-align: center;
-            font-size: 1.6rem;
-            position: position; 
-            margin-top: 8px; 
-            font-weight: 600;
-            color: var(--primary-color);
-        } 
         .theme-toggle, .back-button {
             background: transparent;
             border: 0.9px solid var(--border-color-save);
@@ -91,7 +84,12 @@
             transform: scale(1.1);
         }
 
-     
+        .header-buttons {
+            float: left; /* استخدام float بدلاً من flex */
+            display: flex;
+            gap: 0.5rem;
+        }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -102,7 +100,7 @@
             background: var(--button-background);
             border: 1px solid var(--border-color);
             border-radius: 0.75rem;
-            padding: 3rem;
+            padding: 1.5rem;
             text-align: center;
             transition: all 0.3s ease;
             display: flex;
@@ -117,9 +115,9 @@
         }
 
         .grid-item img {
-            max-width: 140%;
-            height: auto;
-            border-radius: 0.5rem;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
             margin-bottom: 1rem;
         }
 
@@ -130,7 +128,13 @@
             margin-bottom: 0.5rem;
         }
 
-        .download-btn {
+        .grid-item p {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .visit-btn {
             background: var(--primary-color);
             color: white;
             border: none;
@@ -144,7 +148,7 @@
             text-decoration: none;
         }
 
-        .download-btn:hover {
+        .visit-btn:hover {
             background: #218838;
         }
 
@@ -179,7 +183,7 @@
 </head>
 <body>
     <div class="container">
-        <header class="header">
+           <header class="header">
             <div class="header-buttons">
                 <button class="theme-toggle" onclick="toggleTheme()" aria-label="تبديل السمة">
                     <i data-lucide="sun" aria-hidden="true"></i>
@@ -188,69 +192,62 @@
                     <i data-lucide="arrow-left" aria-hidden="true"></i>
                 </button>
             </div>
-            <div class="header-title">جداول التوقيت S2</div>
+            <div class="header-title">القنوات</div>
         </header>
-        
-        
         <main class="grid-container">
             <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/A.jpg" >
-                <h3>Section A</h3>
-                <a href="A.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
+                <img src="https://yt3.googleusercontent.com/gmPLyJGgJf2REwFmJ3hsXjgwso3wcICIoR1MuCkf7oYled8FY08wAJfb00CBOfL9LVepNuJaCg=s160-c-k-c0x00ffffff-no-rj">
+                <h3>15 min math</h3>
+                <p>رياضيات</p>
+                <a href="https://youtube.com/@15minmathlr?si=a21Kc3gPBXh69F4D" target="_blank" class="visit-btn">
+                    <i data-lucide="youtube" aria-hidden="true"></i>
+                    زيارة القناة
                 </a>
             </div>
             <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/B.jpg" >
-                <h3>Section B</h3>
-                <a href="B.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
+                <img src="https://yt3.googleusercontent.com/ytc/AIdro_lXBuiH4eeAUKP-vIeMNkl5CHIN04_Eu6aZTV537R6HKtI=s160-c-k-c0x00ffffff-no-rj" alt="شعار قناة الفيزياء">
+                <h3>oukerini</h3>
+                <p>رياضيات</p>
+                <a href="https://youtube.com/@oukerimi_mathphy?si=4T6fqkuzhkLlsJXp" target="_blank" class="visit-btn">
+                    <i data-lucide="youtube" aria-hidden="true"></i>
+                    زيارة القناة
                 </a>
             </div>
             <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/C.jpg" >
-                <h3>Section C</h3>
-                <a href="C.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
+                <img src="https://yt3.googleusercontent.com/a18XYBFPP3XMyJy3pSUFO-1RWtAIJMheTtVQvydrg_r4KMK7wHIKdFIPWdgN8x1MsIO-YrzIDQ=s160-c-k-c0x00ffffff-no-rj" alt="شعار قناة البرمجة">
+                <h3>symphony of study</h3>
+                <p>chimie</p>
+                <a href="https://youtube.com/@symphonyofstudy9890?si=Nqou6xACtMg7_8_p" target="_blank" class="visit-btn">
+                    <i data-lucide="youtube" aria-hidden="true"></i>
+                    زيارة القناة
                 </a>
             </div>
             <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/D.jpg" >
-                <h3>Section D</h3>
-                <a href="D.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
+                <img src="https://yt3.googleusercontent.com/UUuvOizpfztd-TDbkcRncttX2XDHCqbPWjgriA3SnaOXlZE3wozlzIY6NhYfRuFtfhvMe8HcKA=s160-c-k-c0x00ffffff-no-rj" alt="شعار قناة الكيمياء">
+                <h3>Prof_Ourihane Physique</h3>
+                <p>chimie + physique</p>
+                <a href="https://youtube.com/@profourihane?si=WyzRmHT3SlhT_qX5" target="_blank" class="visit-btn">
+                    <i data-lucide="youtube" aria-hidden="true"></i>
+                    زيارة القناة
                 </a>
             </div>
-        
-    
-    <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/E.jpg" >
-                <h3>Section E</h3>
-                <a href="E.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
+            <div class="grid-item">
+                <img src="https://yt3.googleusercontent.com/ZmYpMr2XPK_FfbXnLK6B_kruTlGXg29rTdOoJa4kek4s3qtdT0_xkpidHZ8osstWIHd5mNFj_94=s160-c-k-c0x00ffffff-no-rj" alt="شعار قناة الإحصاء">
+                <h3>الاستاذ علي في الفيزياء</h3>
+                <p>physique</p>
+                <a href="https://youtu.be/1SAZMOLiBNA?si=p76wyubOyz0Vt1TC" target="_blank" class="visit-btn">
+                    <i data-lucide="youtube" aria-hidden="true"></i>
+                    زيارة القناة
                 </a>
             </div>
-        
-    
-    <div class="grid-item">
-                <img src="https://stusdb.github.io/stl1calc/F.jpg" >
-                <h3>Section F</h3>
-                <a href="F.jpg" download class="download-btn">
-                    <i data-lucide="download" aria-hidden="true"></i>
-                    تحميل
-                </a>
-            </div>
+            
         </main>
     </div>
 
     <footer>
         <p>made by <a href="https://t.me/rewx_x" target="_blank" style="color: #28a745; cursor: default; text-decoration: none; font-family: 'Tajawal', sans-serif;">@rewx_x</a></p>
     </footer>
+
 
     <script>
         lucide.createIcons();
@@ -267,7 +264,7 @@
         }
 
         function goBack() {
-            window.location.href = 'https://stusdb.github.io/stl1calc/'; // تغيير هذا إلى عنوان URL الصفحة الرئيسية الفعلي
+            window.location.href = 'index.html'; // تغيير هذا إلى عنوان URL الصفحة الرئيسية الفعلي
         }
     </script>
 </body>
