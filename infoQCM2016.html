@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Programming Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --background-color: #121212;
+            --surface-color: #1e1e1e;
+            --text-color: #e0e0e0;
+            --primary-color: #4CAF50;
+            --secondary-color: #388E3C;
+            --correct-color: #4CAF50;
+            --incorrect-color: #F44336;
+            --border-color: #333;
+            --code-background: #1a1a1a;
+            --code-text: #e0e0e0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .light-mode {
+            --background-color: #f5f5f5;
+            --surface-color: #ffffff;
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --code-background: #f0f0f0;
+            --code-text: #333;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: var(--transition);
+            line-height: 1.6;
+            cursor: default;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .quiz-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-container {
+            background: var(--surface-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .question-number {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-number::before {
+            content: 'Q';
+            font-size: 0.8em;
+            background: var(--primary-color);
+            color: white;
+            width: 1.5em;
+            height: 1.5em;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .code-block {
+            background: var(--code-background);
+            color: var(--code-text);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-family: monospace;
+            overflow-x: auto;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option {
+            padding: 1rem;
+            border-radius: 8px;
+            background: var(--background-color);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .option:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--correct-color);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .option.incorrect {
+            border-color: var(--incorrect-color);
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
+        .option-letter {
+            font-weight: 600;
+            color: var(--primary-color);
+            width: 1.5em;
+            height: 1.5em;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(76, 175, 80, 0.1);
+            flex-shrink: 0;
+        }
+
+        .option.correct .option-letter {
+            background: rgba(76, 175, 80, 0.2);
+            color: var(--correct-color);
+        }
+
+        .option.incorrect .option-letter {
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--incorrect-color);
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--correct-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feedback.incorrect {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--incorrect-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .explanation {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            background: var(--background-color);
+            display: none;
+        }
+
+        .explanation.visible {
+            display: block;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: default;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+        }
+
+        .nav-button.prev {
+            background: var(--background-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-button.next {
+            background: var(--primary-color);
+            color: white;
+            border: 1px solid var(--primary-color);
+        }
+
+        .nav-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .progress-container {
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        #themeToggle {
+            background: var(--background-color);
+            border: 1px solid var(--border-color);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+            transition: var(--transition);
+        }
+
+        #themeToggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Start screen styles */
+        .start-screen {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .start-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .start-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: default;
+            transition: var(--transition);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            max-width: 200px;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .quiz-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--background-color);
+            text-align: left;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-list li::before {
+            content: '•';
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Results screen styles */
+        .results-container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .results-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .score-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .restart-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: default;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .restart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <div class="quiz-header">
+            <div class="quiz-title">
+                <span>C Programming Quiz</span>
+            </div>
+            <button id="themeToggle" aria-label="Toggle theme">
+                <i data-lucide="sun"></i>
+            </button>
+        </div>
+
+        <div id="quizContent">
+            <!-- Content will be loaded here -->
+        </div>
+
+        <div id="navigation" class="navigation" style="display: none;">
+            <button class="nav-button prev" id="prevButton" disabled>
+                <i data-lucide="chevron-left"></i>
+                Previous
+            </button>
+            <button class="nav-button next" id="nextButton">
+                Next
+                <i data-lucide="chevron-right"></i>
+            </button>
+        </div>
+
+        <div id="progressContainer" class="progress-container" style="display: none;">
+            <span class="progress-text" id="progressText">1 of 28</span>
+        </div>
+    </div>
+
+    <footer>
+        Made with by <a href="https://t.me/rewx_x" target="_blank">@rewx_x</a>
+    </footer>
+
+    <script>
+        // Quiz data
+        const quizData = {
+            questions: [
+                {
+                    question: "What does the following instruction display?",
+                    code: 'printf("I like C %d times", 30/20);',
+                    options: [
+                        "I like C 0 times",
+                        "I like C 1 times",
+                        "I like C 1.5 times",
+                        "I don't like C"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Integer division of 30/20 equals 1."
+                },
+                {
+                    question: "What do the following instructions display?",
+                    code: 'int x=9; int y=x+10; printf("%d %d %d", x, y, y);',
+                    options: [
+                        "9 19 :",
+                        "9 19 19",
+                        "9 19 %d",
+                        "%d %d %d"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "x=9, y=19, and the third value is also y which is 19."
+                },
+                {
+                    question: "What do the following instructions display?",
+                    code: 'char a; a=65; printf("%d %c", a, a);',
+                    options: [
+                        "A A",
+                        "65 A",
+                        "A 65",
+                        "65 65"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "char a = 65 (ASCII for 'A'), %d prints the numeric value 65, %c prints the character 'A'."
+                },
+                {
+                    question: "What do the following instructions display?",
+                    code: 'int i=10; while (i>0) { i=i-4; printf("%d ", i); }',
+                    options: [
+                        "1 0 6 2",
+                        "6 2 -2",
+                        "6 2",
+                        "It's an infinite loop"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Loop decrements i by 4 until i > 0. Values printed: 6, 2, -2."
+                },
+                {
+                    question: "The 'char' type corresponds to:",
+                    options: [
+                        "An integer encoded in a single byte",
+                        "A real number",
+                        "A string of characters",
+                        "None of these three answers"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "In C, char is a 1-byte integer type that can represent a single character."
+                },
+                {
+                    question: "What is the value of S after executing the following instructions?",
+                    code: 'int i; int S=0; for (i=1; i<6; i=i+2) S=S+i;',
+                    options: [
+                        "6",
+                        "7",
+                        "8",
+                        "9"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "S starts at 0 and sums 1+3+5, which equals 9."
+                },
+                {
+                    question: "What is the memory size of the symbolic constant defined by #define A 10.5?",
+                    options: [
+                        "0 bytes",
+                        "1 byte",
+                        "2 bytes",
+                        "4 bytes"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Float constants occupy 4 bytes in memory."
+                },
+                {
+                    question: "The 'sentence' type corresponds to:",
+                    options: [
+                        "An integer encoded in a single byte",
+                        "A real number",
+                        "A string of characters",
+                        "None of these three answers"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "There is no 'sentence' type in C."
+                },
+                {
+                    question: "In an if structure...",
+                    options: [
+                        "The parentheses around the logical condition are mandatory",
+                        "The 'else' keyword is mandatory",
+                        "The condition, stated just after if, is followed by a semicolon"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "In C, parentheses around the condition in an if statement are required by the syntax."
+                },
+                {
+                    question: "If the number of iterations is known, it is advisable to use:",
+                    options: [
+                        "while...",
+                        "do...while",
+                        "for..."
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The for loop is designed for situations where the number of iterations is known in advance."
+                },
+                {
+                    question: "The 'switch' instruction is used to avoid:",
+                    options: [
+                        "Nested while... loops",
+                        "Nested do...while loops",
+                        "Nested if...else... statements",
+                        "Nested for... loops"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The switch statement is an alternative to multiple nested if-else statements."
+                },
+                {
+                    question: "If the number of iterations is not known in advance and you want to execute the loop at least once, you use:",
+                    options: [
+                        "while...",
+                        "do...while",
+                        "for..."
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The do-while loop always executes at least once before checking the condition."
+                },
+                {
+                    question: "In C programming, which sign is used for assignment?",
+                    options: [
+                        "=",
+                        ":=",
+                        "=="
+                    ],
+                    correctAnswer: 0,
+                    explanation: "In C, the = operator is used for assignment."
+                },
+                {
+                    question: "Consider two arrays T1 and T2. Select the correct statements. It is possible to copy the content of T2 into T1 without losing information:",
+                    options: [
+                        "Directly if T1 and T2 are the same size: use the instruction T1=T2",
+                        "Directly if the size of T1 is greater than the size of T2: use the instruction T1=T2",
+                        "Directly if the size of T2 is greater than the size of T1: use the instruction T1=T2",
+                        "Element by element using a loop as long as the size of T1 is greater than or equal to the size of T2"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Arrays cannot be directly copied with T1=T2 in C. You must copy element by element using a loop."
+                },
+                {
+                    question: "Given an array int T[10]; to access the third element of array T, you use:",
+                    options: [
+                        "T[3]",
+                        "T[2]",
+                        "T{2}",
+                        "T(3)"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Arrays in C are zero-indexed, so the third element has index 2."
+                },
+                {
+                    question: "Given the following variable definitions: int i; int tab[10]; char c; int *pti; char *ptc; Which of these statements are correct?",
+                    options: [
+                        "pti=&i; *pti=12;",
+                        "pti=&tab; *pti=4;",
+                        "ptc=&c; *ptc='a';",
+                        "tab[i] is equivalent to *(tab+i);",
+                        "tab[i] is equivalent to &(tab+i);"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "This is the correct way to assign a pointer to an integer variable and then modify its value."
+                },
+                {
+                    question: "Consider the following declaration: char *ptc; What can ptc contain?",
+                    options: [
+                        "Values of character-type variables",
+                        "Addresses of character-type variables"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "A pointer variable stores memory addresses, not values."
+                },
+                {
+                    question: "Given the following constants and variables: #define A 5, #define B 7, #define G 5.6, float c, d; int e=5, f=7; Which of these declarations are correct?",
+                    options: [
+                        "int T1[10][B];",
+                        "float T2[10][B];",
+                        "int T3[A][B];",
+                        "int T4[G][B];",
+                        "char T5[1][c];",
+                        "float T6[e][f];"
+                    ],
+                    correctAnswer: 5,
+                    explanation: "This is a valid declaration of a 2D float array with dimensions determined by integer variables."
+                },
+                {
+                    question: "Which of these function declarations are correct if they are supposed to calculate 'x' raised to the power of integer 'n'?",
+                    options: [
+                        "float power(float x, int n);",
+                        "power(float x, int n);",
+                        "void power(float x, int n);",
+                        "power();"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "This is the proper function prototype with return type for a power function."
+                },
+                {
+                    question: "It is advisable to use variables that are:",
+                    options: [
+                        "Local",
+                        "Global"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Local variables are preferred for better encapsulation and to avoid side effects."
+                },
+                {
+                    question: "What are the correct ways to pass an integer array 'tab' as an argument?",
+                    options: [
+                        "void function(int *tab, int dim);",
+                        "void function(int tab[], int dim);",
+                        "void function(int &tab, int dim);"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Both options 1 and 2 are valid in C for passing arrays to functions."
+                },
+                {
+                    question: "In a header file .h, you put:",
+                    options: [
+                        "Function definitions",
+                        "Function headers or prototypes",
+                        "Structure definitions",
+                        "The main function",
+                        "All variables of the project"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Header files typically contain function prototypes, not their implementations."
+                },
+                {
+                    question: "The free function from the stdlib.h library is used to set a pointer to zero.",
+                    options: [
+                        "True",
+                        "False"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The free function is used to deallocate memory, not to set a pointer to zero."
+                },
+                {
+                    question: "What does the malloc(n) function do?",
+                    options: [
+                        "Provides the address of the first byte of a free memory block of n bytes",
+                        "Provides the address of the first byte of a free memory block of n bytes or the NULL pointer if there is not enough memory",
+                        "Provides a memory block from address n"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "malloc(n) allocates n bytes of memory and returns a pointer to it, or NULL if allocation fails."
+                },
+                {
+                    question: "In C, you can use variables without having to declare them.",
+                    options: [
+                        "True",
+                        "False"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "C requires all variables to be declared before use."
+                },
+                {
+                    question: "Given the following code: struct stamp { int price; int year; char origin[20]; char image[20]; }; struct stamp COLLECTION[10]; How do you access the year of the 3rd stamp in the collection?",
+                    options: [
+                        "COLLECTION[2,2]",
+                        "COLLECTION[2].year",
+                        "COLLECTION.year[2]",
+                        "COLLECTION.year",
+                        "(COLLECTION+2)->year"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "To access a member of a struct in an array, use the array index followed by the dot operator and member name."
+                },
+                {
+                    question: "Given the function prototype: void fiche(float *x, float *y, int i, char z, char c); And the declarations: float a, c; int j; char b, h; Which function calls are correct?",
+                    options: [
+                        "fiche(a, c; j; b, h);",
+                        "fiche(&a, &b, c, j, h);",
+                        "fiche(&a, &c, 3, 'b', b);",
+                        "fiche(&a, &c, j, b, h);",
+                        "fiche(a; j; b; h);"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "This call correctly matches the prototype void fiche(float*, float*, int, char, char)."
+                },
+                {
+                    question: "Given the file pointer defined by FILE *fp; you want to open the file 'C:/Mydocuments/test.txt' in read mode. Select the correct statements.",
+                    options: [
+                        "'C:/Mydocuments/test.txt'=fopen(fp, 'r');",
+                        "fp=fopen('C:/Mydocuments/test.txt', 'r');",
+                        "fp=fopen(C:/Mydocuments/test.txt, 'r');",
+                        "fopen(fp, 'C:/Mydocuments/test.txt', 'r');",
+                        "The file 'C:/Mydocuments/test.txt' must exist",
+                        "If the file 'C:/Mydocuments/test.txt' does not exist, it is created"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "This is the correct syntax for opening a file in read mode, and the file must exist when using 'r' mode."
+                }
+            ]
+        };
+
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let quizStarted = false;
+
+        // DOM elements
+        const quizContent = document.getElementById('quizContent');
+        const navigation = document.getElementById('navigation');
+        const progressContainer = document.getElementById('progressContainer');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressText = document.getElementById('progressText');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Show start screen
+        function showStartScreen() {
+            quizStarted = false;
+            navigation.style.display = 'none';
+            progressContainer.style.display = 'none';
+            
+            quizContent.innerHTML = `
+                <div class="start-screen">
+                    <h2 class="start-title">C Programming Quiz</h2>
+                    <button class="start-button" id="startButton">
+                        <i data-lucide="play"></i>
+                        Start Quiz
+                    </button>
+                    
+                    <div class="quiz-info">
+                        <div class="info-title">Quiz Information:</div>
+                        <ul class="info-list">
+                            <li><strong>Questions:</strong> ${quizData.questions.length} multiple-choice questions</li>
+                            <li><strong>Topics:</strong> C syntax, data types, control structures, pointers, arrays, and more</li>
+                            <li><strong>Scoring:</strong> +1 point for each correct answer</li>
+                            <li><strong>Navigation:</strong> You can review and change your answers before submitting</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+            // Add event listener to start button
+            document.getElementById('startButton').addEventListener('click', startQuiz);
+            
+            lucide.createIcons();
+        }
+
+        // Start quiz
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = Array(quizData.questions.length).fill(null);
+            quizStarted = true;
+            
+            navigation.style.display = 'flex';
+            progressContainer.style.display = 'flex';
+            
+            loadQuestion(0);
+        }
+
+        // Load question
+        function loadQuestion(index) {
+            const question = quizData.questions[index];
+            
+            let optionsHTML = question.options.map((option, i) => {
+                return `
+                    <div class="option" data-index="${i}">
+                        <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+                        <span>${option}</span>
+                    </div>
+                `;
+            }).join('');
+
+            let codeHTML = '';
+            if (question.code) {
+                codeHTML = `<div class="code-block">${question.code}</div>`;
+            }
+
+            quizContent.innerHTML = `
+                <div class="question-container">
+                    <div class="question-number">Question ${index + 1}</div>
+                    <div class="question-text">${question.question}</div>
+                    ${codeHTML}
+                    <div class="options-container">${optionsHTML}</div>
+                    <div class="feedback" id="feedback"></div>
+                    <div class="explanation" id="explanation">${question.explanation}</div>
+                </div>
+            `;
+
+            // Add event listeners to options if not answered yet
+            if (userAnswers[index] === null) {
+                document.querySelectorAll('.option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        selectOption(parseInt(option.dataset.index));
+                    });
+                });
+            } else {
+                // Show previous answer
+                const selectedOption = document.querySelector(`.option[data-index="${userAnswers[index]}"]`);
+                const isCorrect = userAnswers[index] === question.correctAnswer;
+                
+                if (selectedOption) {
+                    selectedOption.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+                
+                // Show correct answer if wrong
+                if (!isCorrect) {
+                    document.querySelector(`.option[data-index="${question.correctAnswer}"]`).classList.add('correct');
+                }
+                
+                // Show feedback
+                const feedback = document.getElementById('feedback');
+                feedback.textContent = isCorrect ? "Correct!" : "Incorrect!";
+                feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                // Show explanation
+                document.getElementById('explanation').classList.add('visible');
+            }
+
+            // Update navigation buttons
+            prevButton.disabled = index === 0;
+            nextButton.textContent = index === quizData.questions.length - 1 ? "Show Results" : "Next";
+            
+            // Update progress
+            progressText.textContent = `${index + 1} of ${quizData.questions.length}`;
+        }
+
+        // Select option
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            const explanation = document.getElementById('explanation');
+            const question = quizData.questions[currentQuestion];
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            // Store user's answer
+            userAnswers[currentQuestion] = index;
+            
+            // Check answer
+            const isCorrect = index === question.correctAnswer;
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Show feedback
+            feedback.textContent = isCorrect ? "Correct!" : "Incorrect!";
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            
+            // Mark selected option
+            const selectedOption = document.querySelector(`.option[data-index="${index}"]`);
+            selectedOption.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            // Show correct answer if wrong
+            if (!isCorrect) {
+                document.querySelector(`.option[data-index="${question.correctAnswer}"]`).classList.add('correct');
+            }
+            
+            // Show explanation
+            explanation.classList.add('visible');
+        }
+
+        // Show results
+        function showResults() {
+            const totalQuestions = quizData.questions.length;
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            quizContent.innerHTML = `
+                <div class="results-container">
+                    <h2 class="results-title">Quiz Results</h2>
+                    <div class="score-display">${score}/${totalQuestions}</div>
+                    <p class="score-text">You got ${percentage}% correct!</p>
+                    
+                    <button class="restart-button" id="restartButton">
+                        <i data-lucide="refresh-cw"></i> Take Quiz Again
+                    </button>
+                </div>
+            `;
+
+            // Hide navigation
+            navigation.style.display = 'none';
+            progressContainer.style.display = 'none';
+
+            // Add event listeners
+            document.getElementById('restartButton').addEventListener('click', startQuiz);
+            
+            lucide.createIcons();
+        }
+
+        // Navigation
+        prevButton.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentQuestion < quizData.questions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        });
+
+        // Theme toggle
+        function updateThemeIcon() {
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('light-mode')) {
+                icon.setAttribute('data-lucide', 'moon');
+            } else {
+                icon.setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            updateThemeIcon();
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // Initialize - Apply stored theme or default to dark
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        } else {
+            document.body.classList.remove('light-mode');
+        }
+
+        updateThemeIcon();
+
+        // Initialize the quiz with start screen
+        showStartScreen();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
