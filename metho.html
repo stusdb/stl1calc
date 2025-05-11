@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communication Principles Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-light: #81C784;
+            --primary-dark: #388E3C;
+            --accent-color: #8BC34A;
+            --background-color: #121212;
+            --surface-color: #1e1e1e;
+            --surface-color-light: #2d2d2d;
+            --text-color: #e0e0e0;
+            --text-color-secondary: #b0b0b0;
+            --correct-color: #4CAF50;
+            --incorrect-color: #F44336;
+            --border-color: #333;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --card-radius: 16px;
+            --button-radius: 12px;
+        }
+
+        .light-mode {
+            --background-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --surface-color-light: #f1f3f5;
+            --text-color: #212529;
+            --text-color-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: var(--transition);
+            line-height: 1.6;
+            cursor: default;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 25px 25px, rgba(76, 175, 80, 0.15) 2%, transparent 0%), 
+                             radial-gradient(circle at 75px 75px, rgba(76, 175, 80, 0.1) 2%, transparent 0%);
+            background-size: 100px 100px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 1.5rem 2rem;
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .quiz-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quiz-title-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            flex-shrink: 0; /* Prevent icon from shrinking on mobile */
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .question-container {
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+        }
+
+        .question-number {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .question-number-badge {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            flex-shrink: 0; /* Prevent badge from shrinking on mobile */
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1.25rem;
+            border-radius: var(--button-radius);
+            background: var(--surface-color-light);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: default; /* Changed from pointer to default */
+        }
+
+        .option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--correct-color);
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        .option.incorrect {
+            border-color: var(--incorrect-color);
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        .option-letter {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--primary-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(76, 175, 80, 0.1);
+            flex-shrink: 0;
+            font-size: 1rem;
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .option.correct .option-letter {
+            background: var(--correct-color);
+            color: white;
+        }
+
+        .option.incorrect .option-letter {
+            background: var(--incorrect-color);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .feedback {
+            margin-top: 1.5rem;
+            padding: 1rem 1.25rem;
+            border-radius: var(--button-radius);
+            font-weight: 500;
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback.correct {
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--correct-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid var(--correct-color);
+        }
+
+        .feedback.incorrect {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--incorrect-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid var(--incorrect-color);
+        }
+
+        .feedback-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .explanation {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            border-radius: var(--button-radius);
+            background: var(--surface-color-light);
+            display: none;
+            border-left: 4px solid var(--primary-color);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .explanation.visible {
+            display: block;
+        }
+
+        .explanation-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .explanation-content {
+            color: var(--text-color-secondary);
+            font-size: 0.95rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-button {
+            padding: 0.9rem 1.75rem;
+            border-radius: var(--button-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: default; /* Changed from pointer to default */
+            font-family: 'Montserrat', sans-serif;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-button.prev {
+            background: var(--surface-color-light);
+            color: var(--text-color);
+        }
+
+        .nav-button.next {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .nav-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-button.prev:hover:not(:disabled) {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-container {
+            margin-top: 2rem;
+            padding: 1.5rem 2rem;
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: var(--surface-color-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .progress-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .progress-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-color-secondary);
+        }
+
+        #themeToggle {
+            background: var(--surface-color-light);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default; /* Changed from pointer to default */
+            transition: var(--transition);
+            color: var(--text-color);
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        #themeToggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Start screen styles */
+        .start-screen {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .start-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .start-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .start-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: var(--button-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: default; /* Changed from pointer to default */
+            transition: var(--transition);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .quiz-info {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            border-radius: var(--button-radius);
+            background: var(--surface-color-light);
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(76, 175, 80, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .info-card-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .info-card-content {
+            color: var(--text-color-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Results screen styles */
+        .results-container {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .results-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .results-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .results-subtitle {
+            color: var(--text-color-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .score-display {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 2rem;
+        }
+
+        .score-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--surface-color-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border-radius: 50%;
+            background: var(--surface-color);
+            z-index: 1;
+        }
+
+        .score-value {
+            position: relative;
+            z-index: 2;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .score-text {
+            font-size: 1.2rem;
+            margin: 1rem 0 2rem;
+            color: var(--text-color);
+        }
+
+        .score-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .score-progress svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .score-progress circle {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform-origin: center;
+            transform: scale(0.94);
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .result-stat {
+            background: var(--surface-color-light);
+            padding: 1.25rem;
+            border-radius: var(--button-radius);
+        }
+
+        .result-stat-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .result-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .restart-button {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--button-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: default; /* Changed from pointer to default */
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .restart-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: confetti-fall 5s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+
+            .quiz-header, .question-container, .progress-container {
+                padding: 1.5rem;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .option {
+                padding: 1rem;
+            }
+
+            .results-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <div class="quiz-header">
+            <div class="quiz-title">
+                <div class="quiz-title-icon">
+                    <i data-lucide="file-text"></i>
+                </div>
+                <span>Methodology</span>
+            </div>
+            <button id="themeToggle" aria-label="Toggle theme">
+                <i data-lucide="sun"></i>
+            </button>
+        </div>
+
+        <div id="quizContent">
+            <!-- Content will be loaded here -->
+        </div>
+
+        <div id="navigation" class="navigation" style="display: none;">
+            <button class="nav-button prev" id="prevButton" disabled>
+                <i data-lucide="chevron-left"></i>
+                Previous
+            </button>
+            <button class="nav-button next" id="nextButton">
+                Next
+                <i data-lucide="chevron-right"></i>
+            </button>
+        </div>
+
+        <div id="progressContainer" class="progress-container" style="display: none;">
+            <div class="progress-stats">
+                <div class="progress-stat">
+                    <div class="progress-stat-value" id="currentQuestionStat">0</div>
+                    <div class="progress-stat-label">Current</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-value" id="correctAnswersStat">0</div>
+                    <div class="progress-stat-label">Correct</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-value" id="totalQuestionsStat">0</div>
+                    <div class="progress-stat-label">Total</div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text">
+                <span id="progressText">Question 1 of 55</span>
+                <span id="progressPercentage">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Made with by <a href="https://t.me/rewx_x" target="_blank">@rewx_x</a>
+    </footer>
+
+    <script>
+        // Quiz data
+        const quizData = {
+            questions: [
+                {
+                    question: "What is the first step of the research methodology?",
+                    options: [
+                        "Prepare your research",
+                        "Analyse your information needs",
+                        "Choose sources",
+                        "Evaluating the documents found"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The first step in research methodology is to analyze your information needs to understand what you're looking for."
+                },
+                {
+                    question: "What is the purpose of step 2 in a research strategy?",
+                    options: [
+                        "Evaluate the results of your research",
+                        "Identify the subject and define the aim of your work",
+                        "Choose sources",
+                        "Find the necessary documents"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Step 2 involves identifying your subject and defining the aim of your work to give direction to your research."
+                },
+                {
+                    question: "Why is it necessary to communicate, according to the course?",
+                    options: [
+                        "To give or provide information",
+                        "To keep a distance from others",
+                        "Not to get involved",
+                        "Ignore what others say"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Communication is necessary to give or provide information to others."
+                },
+                {
+                    question: "Why does the course say we need to communicate?",
+                    options: [
+                        "To persuade and influence others",
+                        "To isolate yourself from others",
+                        "Trying not to interact",
+                        "Not paying attention to what is being said"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "We need to communicate to persuade and influence others, which is a key function of communication."
+                },
+                {
+                    question: "Who is responsible for receiving the message in Shannon's model?",
+                    options: [
+                        "Noise",
+                        "Sender",
+                        "Channel",
+                        "Receiver"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "In Shannon's communication model, the receiver is responsible for receiving and interpreting the message."
+                },
+                {
+                    question: "Who is responsible for sending the message in Shannon's model?",
+                    options: [
+                        "Sender",
+                        "Receiver",
+                        "Messenger",
+                        "Canal"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "In Shannon's model, the sender is responsible for creating and transmitting the message."
+                },
+                {
+                    question: "How can we describe the sender actor in communication?",
+                    options: [
+                        "The person who sends the message",
+                        "The one who carries out an action",
+                        "He who analyses the context",
+                        "The person receiving the message"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "The sender in communication is the person who creates and sends the message to the receiver."
+                },
+                {
+                    question: "What is the objective of communication, which aims to convey a message?",
+                    options: [
+                        "Emotional objective",
+                        "Informational objective",
+                        "Commercial objective",
+                        "Relational objective"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The informational objective of communication is to convey or transmit a message to the receiver."
+                },
+                {
+                    question: "What is the informational objective of communication?",
+                    options: [
+                        "To establish a relationship",
+                        "Transmit a message",
+                        "Sell a product",
+                        "Entertain the public"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The informational objective focuses on transmitting a message or information to the receiver."
+                },
+                {
+                    question: "What is the relational objective of communication?",
+                    options: [
+                        "To convey a message",
+                        "Convincing the audience",
+                        "Establish a relationship",
+                        "Informing the public"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The relational objective of communication is to establish and maintain relationships between people."
+                },
+                {
+                    question: "What objective are the players trying to achieve with their communication?",
+                    options: [
+                        "Relational objective",
+                        "Educational objective",
+                        "Emotional objective",
+                        "Commercial objective"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Players typically communicate to establish and maintain relationships, which is a relational objective."
+                },
+                {
+                    question: "What does message loss refer to in the field of communication?",
+                    options: [
+                        "A gain of understanding between a sender and a receiver",
+                        "An increase in the clarity of the message",
+                        "A loss of understanding between a sender and a receiver",
+                        "A total preservation of the message"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Message loss refers to a loss of understanding between the sender and receiver during communication."
+                },
+                {
+                    question: "What is the significance of message loss in the field of communication?",
+                    options: [
+                        "Better understanding between sender and receiver",
+                        "A complete saving of the message",
+                        "Greater clarity of the message",
+                        "A loss of understanding between a sender and a receiver"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Message loss is significant because it represents a breakdown in understanding between communicators."
+                },
+                {
+                    question: "What does it mean to lose the message in communication?",
+                    options: [
+                        "A deep understanding between two people",
+                        "Perfect transmission of the message",
+                        "A loss of understanding between a sender and a receiver",
+                        "No communication at all"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Losing the message means there's a loss of understanding between the sender and receiver."
+                },
+                {
+                    question: "What is feedback in communication?",
+                    options: [
+                        "Ignorance of the message sent",
+                        "The initial message sent by the sender",
+                        "Total acceptance of the message without reaction",
+                        "The receiver's reaction to the message and its return to the sender"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Feedback is the receiver's reaction to the message that is returned to the sender."
+                },
+                {
+                    question: "What is feedback in a communication situation?",
+                    options: [
+                        "The receiver's reaction to the message and its return to the sender",
+                        "The initial message sent by the sender",
+                        "Total acceptance of the message without reaction",
+                        "Ignorance of the message sent"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Feedback is the receiver's reaction to the message that is returned to the sender, completing the communication loop."
+                },
+                {
+                    question: "What is the context?",
+                    options: [
+                        "Elements that take several elements into account",
+                        "All the external conditions in which the communication takes place",
+                        "The setting in which the communication takes place",
+                        "The place and time of the exchange"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Context refers to all the external conditions that influence the communication process."
+                },
+                {
+                    question: "What is the spatial context?",
+                    options: [
+                        "The place and time of the exchange",
+                        "The setting in which the communication takes place",
+                        "Elements that take several elements into account",
+                        "All the external conditions in which the communication takes place"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The spatial context refers specifically to the physical setting or environment where communication occurs."
+                },
+                {
+                    question: "What is the spatio-temporal context?",
+                    options: [
+                        "The setting in which the communication takes place",
+                        "Elements that take several elements into account",
+                        "The place and time of the exchange",
+                        "All the external conditions in which the communication takes place"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The spatio-temporal context refers to both the place (spatial) and time (temporal) of the communication exchange."
+                },
+                {
+                    question: "The psychological context of communication focuses on:",
+                    options: [
+                        "The relationship between the individuals involved",
+                        "The position of an individual in the organization",
+                        "The location and moment of the exchange",
+                        "The emotions of the communicators (anger, fear...)"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "The psychological context focuses on the emotional states and mental processes of the communicators."
+                },
+                {
+                    question: "At what distance can people see and hear each other properly?",
+                    options: [
+                        "Public distance",
+                        "Social distance",
+                        "Personal distance",
+                        "Intimate distance"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Personal distance is the range at which people can see and hear each other properly without feeling uncomfortable."
+                },
+                {
+                    question: "How far apart are friendships and professional relationships?",
+                    options: [
+                        "Personal distance",
+                        "Public distance",
+                        "Intimate distance",
+                        "Social distance"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Friendships and professional relationships typically occur at personal distance, which allows for comfortable interaction."
+                },
+                {
+                    question: "At what distance do people whisper and physical contact prevail?",
+                    options: [
+                        "Public distance",
+                        "Social distance",
+                        "Personal distance",
+                        "Intimate distance"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Intimate distance is characterized by whispering and physical contact, typically reserved for close relationships."
+                },
+                {
+                    question: "How far apart can you communicate in front of a group?",
+                    options: [
+                        "Intimate distance",
+                        "Social distance",
+                        "Public distance",
+                        "Personal distance"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Public distance is appropriate for communicating to a group, such as during presentations or speeches."
+                },
+                {
+                    question: "What are the vocal signs used in para-verbal communication?",
+                    options: [
+                        "Written symbols",
+                        "Facial expressions",
+                        "Gestures",
+                        "Rhythm"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Rhythm is a vocal sign used in para-verbal communication, affecting how the message is perceived."
+                },
+                {
+                    question: "What are the vocal signs used in para-verbal communication?",
+                    options: [
+                        "Diction",
+                        "Facial expressions",
+                        "Gesture",
+                        "Posture"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Diction, or the way words are pronounced, is a vocal sign used in para-verbal communication."
+                },
+                {
+                    question: "What are the vocal signs used in para-verbal communication?",
+                    options: [
+                        "Posture",
+                        "Face and facial expressions",
+                        "Gestures",
+                        "Intonation"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Intonation, the rise and fall of voice pitch, is a vocal sign used in para-verbal communication."
+                },
+                {
+                    question: "What proportion of the message is conveyed by non-verbal communication, according to Albert Mehrabian?",
+                    options: [
+                        "13%",
+                        "55%",
+                        "38%",
+                        "7%"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "According to Mehrabian, 55% of communication is non-verbal (body language, facial expressions)."
+                },
+                {
+                    question: "What percentage of the message is transmitted by voice according to the Mehrabian equation?",
+                    options: [
+                        "13%",
+                        "55%",
+                        "38%",
+                        "7%"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Mehrabian's research suggests that 38% of a message's impact comes from vocal elements (tone, pitch, etc.)."
+                },
+                {
+                    question: "What specific eye action is associated with the search for words or ideas?",
+                    options: [
+                        "Maintain constant eye contact",
+                        "Blinking rapidly",
+                        "Looking intensely at the other person",
+                        "Look elsewhere, such as at the ceiling or your feet"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Looking away, such as at the ceiling, is often associated with searching for words or ideas."
+                },
+                {
+                    question: "Why would someone look at the ceiling during a conversation?",
+                    options: [
+                        "To respect cultural norms of politeness",
+                        "To avoid a direct response",
+                        "To make it easier to find words or ideas",
+                        "To show disinterest in the conversation"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Looking at the ceiling often indicates that someone is searching for words or ideas in their mind."
+                },
+                {
+                    question: "What can be transmitted through the gaze in communication?",
+                    options: [
+                        "Body gestures",
+                        "Verbal signs",
+                        "Expressions, intentions, and feelings",
+                        "Terms only"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The gaze can transmit expressions, intentions, and feelings between communicators."
+                },
+                {
+                    question: "What gestures draw objects in space?",
+                    options: [
+                        "Pictographs",
+                        "Ideographs",
+                        "Pointers",
+                        "Kinetograph"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Pictographs are gestures that draw or depict objects in space."
+                },
+                {
+                    question: "Which gesture category is used to indicate dimensions or sizes?",
+                    options: [
+                        "Ideographs",
+                        "Pictographs",
+                        "Pointers",
+                        "Quantitatives"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Quantitative gestures are used to indicate dimensions, sizes, or quantities."
+                },
+                {
+                    question: "Which category of gestures describes in the air concepts, symbols and abstractions?",
+                    options: [
+                        "Ideographs",
+                        "Pictographs",
+                        "Pointers",
+                        "Quantitatives"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Ideographs are gestures that describe abstract concepts, symbols, or ideas in the air."
+                },
+                {
+                    question: "Which presentation objective is the most appropriate for a conference aimed at sharing knowledge on climate change?",
+                    options: [
+                        "Describe",
+                        "Inform, explain",
+                        "Solve problems",
+                        "Convincing, arguing, persuading"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "A conference on climate change knowledge would primarily aim to inform and explain the topic to the audience."
+                },
+                {
+                    question: "If the aim of a presentation is to change public opinion on a controversial subject, what is its main objective?",
+                    options: [
+                        "Solve problems",
+                        "Convincing, arguing, persuading",
+                        "Describe",
+                        "Inform, explain"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Changing public opinion requires convincing, arguing, and persuading the audience."
+                },
+                {
+                    question: "What is the main objective of a presentation designed to showcase the features of a new product?",
+                    options: [
+                        "Inform, explain",
+                        "Solve problems",
+                        "Describe",
+                        "Convincing, arguing, persuading"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Showcasing product features primarily involves describing the product to the audience."
+                },
+                {
+                    question: "Which presentation objective is best suited to an educational conference?",
+                    options: [
+                        "Solve problems",
+                        "Convincing, arguing, persuading",
+                        "Describe",
+                        "Inform, explain"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Educational conferences primarily aim to inform and explain concepts to the audience."
+                },
+                {
+                    question: "What can be transmitted through the gaze in communication?",
+                    options: [
+                        "Body language",
+                        "Verbal cues",
+                        "All expressions, intentions, and feelings",
+                        "Words only"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The gaze can transmit a wide range of expressions, intentions, and feelings between communicators."
+                },
+                {
+                    question: "Why is gaze important in communication?",
+                    options: [
+                        "It causes confusion",
+                        "It makes people fall asleep",
+                        "It has no impact on communication",
+                        "All expressions, intentions, and feelings"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Gaze is important because it can convey expressions, intentions, and feelings during communication."
+                },
+                {
+                    question: "What is NOT a cause of stage fright?",
+                    options: [
+                        "The stakes involved in the situation",
+                        "Fear of being judged by the audience or the speaker",
+                        "Fear of a discrepancy between the image I think I give and the other person",
+                        "The choice of subject"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "The choice of subject itself is not typically a cause of stage fright."
+                },
+                {
+                    question: "What is NOT a cause of stage fright?",
+                    options: [
+                        "Confidence in your abilities",
+                        "The stakes involved in the situation",
+                        "Fear of a discrepancy between the image I think I give and the other person",
+                        "Fear of being judged by the audience or the speaker"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Confidence in your abilities actually helps reduce stage fright rather than causing it."
+                },
+                {
+                    question: "What can noise do to communication?",
+                    options: [
+                        "Improving the quality of communication",
+                        "Ignoring communication",
+                        "Make it difficult to perceive",
+                        "Facilitate communication"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Noise in communication makes it difficult to perceive or understand the message clearly."
+                },
+                {
+                    question: "What is message loss?",
+                    options: [
+                        "Effective communication between two parties",
+                        "A loss of understanding between sender and receiver",
+                        "An increase in the clarity of the message",
+                        "Error-free transfer of information"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Message loss refers to a loss of understanding between the sender and receiver during communication."
+                },
+                {
+                    question: "What is interpersonal communication?",
+                    options: [
+                        "It is established between three different people",
+                        "It is established between a large group of people",
+                        "It is established between two people, between whom there are interactions",
+                        "It only takes place online"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Interpersonal communication occurs between two people who interact with each other."
+                },
+                {
+                    question: "What is group communication?",
+                    options: [
+                        "It is established between a single individual and a group",
+                        "Between two members of the same family",
+                        "Only face-to-face",
+                        "It is established between a group of people who exchange messages"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Group communication involves message exchange among multiple people in a group."
+                },
+                {
+                    question: "What is the first step in preparing a practical presentation?",
+                    options: [
+                        "Determine the key message",
+                        "Gather documentation",
+                        "Define the subject of the presentation",
+                        "Create the structure of the presentation"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The first step is to clearly define the subject or topic of the presentation."
+                },
+                {
+                    question: "What are the three main components of the typical structure of a presentation?",
+                    options: [
+                        "Introduction, body, conclusion",
+                        "Introduction, development, conclusion",
+                        "Opening, middle, end",
+                        "Prologue, main content, epilogue"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The typical structure consists of an introduction, development (main content), and conclusion."
+                },
+                {
+                    question: "What is the purpose of the plan in a presentation?",
+                    options: [
+                        "To impress the audience",
+                        "To organize the content",
+                        "To demonstrate the presenter's expertise",
+                        "To fill time during the presentation"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The plan helps organize the content in a logical and coherent manner."
+                },
+                {
+                    question: "What enable you the plan do for an oral presentation?",
+                    options: [
+                        "To impress the audience",
+                        "To organize the content",
+                        "To demonstrate the presenter's expertise",
+                        "To fill time during the presentation"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The plan enables you to organize your content effectively for an oral presentation."
+                },
+                {
+                    question: "What is the purpose of the conclusion in a presentation?",
+                    options: [
+                        "To introduce the topic",
+                        "To provide detailed information and arguments",
+                        "To summarize the main points and reinforce the key message",
+                        "To demonstrate the presenter's expertise"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The conclusion summarizes main points and reinforces the key message of the presentation."
+                },
+                {
+                    question: "What is the main purpose of a presentation conclusion?",
+                    options: [
+                        "To introduce new ideas",
+                        "Summarise the main ideas developed",
+                        "To ask open questions",
+                        "Entertain the audience"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The main purpose of a conclusion is to summarize the main ideas developed in the presentation."
+                },
+                {
+                    question: "What's the main priority when you're talking to a large audience?",
+                    options: [
+                        "Share as much detailed information as possible",
+                        "Come across as confident",
+                        "Maintain a monotone so as not to distract",
+                        "Avoid eye contact with the audience"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "When speaking to a large audience, appearing confident is a key priority for effective communication."
+                },
+                {
+                    question: "What is a speaker's first objective when presenting to a large audience?",
+                    options: [
+                        "Use your attitude and voice to best effect",
+                        "Avoid looking at the audience",
+                        "Present as much information as possible",
+                        "Make the audience laugh at all costs"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "A speaker's first objective is to use their attitude and voice effectively to engage the audience."
+                }
+            ]
+        };
+
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let quizStarted = false;
+        let questionAttempted = []; // Track if a question has been attempted
+
+        // DOM elements
+        const quizContent = document.getElementById('quizContent');
+        const navigation = document.getElementById('navigation');
+        const progressContainer = document.getElementById('progressContainer');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressText = document.getElementById('progressText');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercentage = document.getElementById('progressPercentage');
+        const themeToggle = document.getElementById('themeToggle');
+        const currentQuestionStat = document.getElementById('currentQuestionStat');
+        const correctAnswersStat = document.getElementById('correctAnswersStat');
+        const totalQuestionsStat = document.getElementById('totalQuestionsStat');
+
+        // Show start screen
+        function showStartScreen() {
+            quizStarted = false;
+            navigation.style.display = 'none';
+            progressContainer.style.display = 'none';
+            
+            quizContent.innerHTML = `
+                <div class="start-screen">
+                    <h2 class="start-title">Communication Principles Quiz</h2>
+                    <p class="start-subtitle">Test your knowledge of communication theory, models, and practices with this comprehensive quiz.</p>
+                    
+                    <button class="start-button" id="startButton">
+                        <i data-lucide="play"></i>
+                        Start Quiz
+                    </button>
+                    
+                    <div class="quiz-info">
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <i data-lucide="help-circle"></i>
+                            </div>
+                            <div class="info-card-title">55 Questions</div>
+                            <div class="info-card-content">Comprehensive assessment covering all aspects of communication principles.</div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <i data-lucide="book-open"></i>
+                            </div>
+                            <div class="info-card-title">Topics</div>
+                            <div class="info-card-content">Research methodology, communication models, non-verbal communication, and presentation skills.</div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <i data-lucide="check-circle"></i>
+                            </div>
+                            <div class="info-card-title">Instant Feedback</div>
+                            <div class="info-card-content">Get immediate feedback and explanations for each answer.</div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <i data-lucide="award"></i>
+                            </div>
+                            <div class="info-card-title">Track Progress</div>
+                            <div class="info-card-content">Monitor your progress and see your score at the end of the quiz.</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add event listener to start button
+            document.getElementById('startButton').addEventListener('click', startQuiz);
+            
+            lucide.createIcons();
+        }
+
+        // Start quiz
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = Array(quizData.questions.length).fill(null);
+            questionAttempted = Array(quizData.questions.length).fill(false); // Initialize all questions as not attempted
+            quizStarted = true;
+            
+            navigation.style.display = 'flex';
+            progressContainer.style.display = 'flex';
+            
+            // Update stats
+            totalQuestionsStat.textContent = quizData.questions.length;
+            
+            loadQuestion(0);
+        }
+
+        // Load question
+        function loadQuestion(index) {
+            const question = quizData.questions[index];
+            
+            let optionsHTML = question.options.map((option, i) => {
+                const letter = String.fromCharCode(97 + i); // a, b, c, d
+                return `
+                    <div class="option" data-index="${i}">
+                        <span class="option-letter">${letter}</span>
+                        <span class="option-text">${option}</span>
+                    </div>
+                `;
+            }).join('');
+
+            quizContent.innerHTML = `
+                <div class="question-container">
+                    <div class="question-number">
+                        <div class="question-number-badge">${index + 1}</div>
+                        <span>Question ${index + 1} of ${quizData.questions.length}</span>
+                    </div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options-container">${optionsHTML}</div>
+                    <div class="feedback" id="feedback"></div>
+                    <div class="explanation" id="explanation">
+                        <div class="explanation-title">
+                            <i data-lucide="lightbulb"></i>
+                            Explanation
+                        </div>
+                        <div class="explanation-content">${question.explanation}</div>
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners to options if not answered yet
+            if (userAnswers[index] === null && !questionAttempted[index]) {
+                document.querySelectorAll('.option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        selectOption(parseInt(option.dataset.index));
+                    });
+                });
+            } else {
+                // Show previous answer
+                const selectedOption = document.querySelector(`.option[data-index="${userAnswers[index]}"]`);
+                const isCorrect = userAnswers[index] === question.correctAnswer;
+                
+                if (selectedOption) {
+                    selectedOption.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+                
+                // Show correct answer if wrong
+                if (!isCorrect) {
+                    document.querySelector(`.option[data-index="${question.correctAnswer}"]`).classList.add('correct');
+                }
+                
+                // Show feedback
+                const feedback = document.getElementById('feedback');
+                feedback.innerHTML = isCorrect ? 
+                    `<div class="feedback-icon"><i data-lucide="check"></i></div> Correct!` : 
+                    `<div class="feedback-icon"><i data-lucide="x"></i></div> Incorrect!`;
+                feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                // Show explanation
+                document.getElementById('explanation').classList.add('visible');
+                
+                // Disable all options since this question has been attempted
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                });
+            }
+
+            // Update navigation buttons
+            prevButton.disabled = index === 0;
+            nextButton.textContent = index === quizData.questions.length - 1 ? "Show Results" : "Next";
+            if (index === quizData.questions.length - 1) {
+                nextButton.innerHTML = `Show Results <i data-lucide="award"></i>`;
+            } else {
+                nextButton.innerHTML = `Next <i data-lucide="chevron-right"></i>`;
+            }
+            
+            // Update progress
+            progressText.textContent = `Question ${index + 1} of ${quizData.questions.length}`;
+            const progress = ((index + 1) / quizData.questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${Math.round(progress)}%`;
+            
+            // Update stats
+            currentQuestionStat.textContent = index + 1;
+            correctAnswersStat.textContent = score;
+            
+            lucide.createIcons();
+        }
+
+        // Select option
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            const explanation = document.getElementById('explanation');
+            const question = quizData.questions[currentQuestion];
+            
+            // Only process the selection if this question hasn't been attempted yet
+            if (!questionAttempted[currentQuestion]) {
+                // Mark this question as attempted
+                questionAttempted[currentQuestion] = true;
+                
+                // Disable all options
+                options.forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                });
+                
+                // Store user's answer
+                userAnswers[currentQuestion] = index;
+                
+                // Check answer
+                const isCorrect = index === question.correctAnswer;
+                if (isCorrect) {
+                    score++;
+                    correctAnswersStat.textContent = score;
+                }
+                
+                // Show feedback with animation
+                feedback.innerHTML = isCorrect ? 
+                    `<div class="feedback-icon"><i data-lucide="check"></i></div> Correct!` : 
+                    `<div class="feedback-icon"><i data-lucide="x"></i></div> Incorrect!`;
+                feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                // Mark selected option
+                const selectedOption = document.querySelector(`.option[data-index="${index}"]`);
+                selectedOption.classList.add(isCorrect ? 'correct' : 'incorrect');
+                
+                // Show correct answer if wrong
+                if (!isCorrect) {
+                    document.querySelector(`.option[data-index="${question.correctAnswer}"]`).classList.add('correct');
+                }
+                
+                // Show explanation
+                explanation.classList.add('visible');
+                
+                lucide.createIcons();
+            }
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const confettiCount = 100;
+            const colors = ['#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107'];
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Show results
+        function showResults() {
+            const totalQuestions = quizData.questions.length;
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            quizContent.innerHTML = `
+                <div class="results-container">
+                    <h2 class="results-title">Quiz Results</h2>
+                    <p class="results-subtitle">You've completed the Communication Principles Quiz!</p>
+                    
+                    <div class="score-display">
+                        <div class="score-circle">
+                            <div class="score-value">${percentage}%</div>
+                        </div>
+                        <div class="score-progress">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" stroke-dasharray="${percentage * 2.83}, 283" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <p class="score-text">You answered ${score} out of ${totalQuestions} questions correctly</p>
+                    
+                    <div class="results-stats  questions correctly</p>
+                    
+                    <div class="results-stats">
+                        <div class="result-stat">
+                            <div class="result-stat-value">${totalQuestions}</div>
+                            <div class="result-stat-label">Total Questions</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value">${score}</div>
+                            <div class="result-stat-label">Correct Answers</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value">${totalQuestions - score}</div>
+                            <div class="result-stat-label">Incorrect Answers</div>
+                        </div>
+                    </div>
+                    
+                    <button class="restart-button" id="restartButton">
+                        <i data-lucide="refresh-cw"></i>
+                        Take Quiz Again
+                    </button>
+                </div>
+            `;
+
+            // Hide navigation
+            navigation.style.display = 'none';
+            progressContainer.style.display = 'none';
+
+            // Add event listeners
+            document.getElementById('restartButton').addEventListener('click', startQuiz);
+            
+            // Create confetti effect if score is good
+            if (percentage >= 70) {
+                createConfetti();
+            }
+            
+            lucide.createIcons();
+        }
+
+        // Navigation
+        prevButton.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentQuestion < quizData.questions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        });
+
+        // Theme toggle
+        function updateThemeIcon() {
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('light-mode')) {
+                icon.setAttribute('data-lucide', 'moon');
+            } else {
+                icon.setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            updateThemeIcon();
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // Initialize - Apply stored theme or default to dark
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        } else {
+            document.body.classList.remove('light-mode');
+        }
+
+        updateThemeIcon();
+
+        // Initialize the quiz with start screen
+        showStartScreen();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
