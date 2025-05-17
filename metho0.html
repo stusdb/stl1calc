@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Methodology Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-light: #81C784;
+            --primary-dark: #388E3C;
+            --accent-color: #8BC34A;
+            --background-color: #121212;
+            --surface-color: #1e1e1e;
+            --surface-color-light: #2d2d2d;
+            --text-color: #e0e0e0;
+            --text-color-secondary: #b0b0b0;
+            --correct-color: #4CAF50;
+            --incorrect-color: #F44336;
+            --border-color: #333;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --card-radius: 16px;
+            --button-radius: 12px;
+        }
+
+        .light-mode {
+            --background-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --surface-color-light: #f1f3f5;
+            --text-color: #212529;
+            --text-color-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: var(--transition);
+            line-height: 1.6;
+            cursor: default;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 25px 25px, rgba(76, 175, 80, 0.15) 2%, transparent 0%), 
+                             radial-gradient(circle at 75px 75px, rgba(76, 175, 80, 0.1) 2%, transparent 0%);
+            background-size: 100px 100px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding: 1.5rem 2rem;
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .quiz-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quiz-title-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            flex-shrink: 0; /* Prevent icon from shrinking on mobile */
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .question-container {
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+        }
+
+        .question-number {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .question-number-badge {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            flex-shrink: 0; /* Prevent badge from shrinking on mobile */
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1.25rem;
+            border-radius: var(--button-radius);
+            background: var(--surface-color-light);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--correct-color);
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        .option.incorrect {
+            border-color: var(--incorrect-color);
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        .option-letter {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--primary-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(76, 175, 80, 0.1);
+            flex-shrink: 0;
+            font-size: 1rem;
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .option.correct .option-letter {
+            background: var(--correct-color);
+            color: white;
+        }
+
+        .option.incorrect .option-letter {
+            background: var(--incorrect-color);
+            color: white;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .feedback {
+            margin-top: 1.5rem;
+            padding: 1rem 1.25rem;
+            border-radius: var(--button-radius);
+            font-weight: 500;
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback.correct {
+            background: rgba(76, 175, 80, 0.15);
+            color: var(--correct-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid var(--correct-color);
+        }
+
+        .feedback.incorrect {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--incorrect-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid var(--incorrect-color);
+        }
+
+        .feedback-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .explanation {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            border-radius: var(--button-radius);
+            background: var(--surface-color-light);
+            display: none;
+            border-left: 4px solid var(--primary-color);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .explanation.visible {
+            display: block;
+        }
+
+        .explanation-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .explanation-content {
+            color: var(--text-color-secondary);
+            font-size: 0.95rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-button {
+            padding: 0.9rem 1.75rem;
+            border-radius: var(--button-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-button.prev {
+            background: var(--surface-color-light);
+            color: var(--text-color);
+        }
+
+        .nav-button.next {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .nav-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-button.prev:hover:not(:disabled) {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-container {
+            margin-top: 2rem;
+            padding: 1.5rem 2rem;
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: var(--surface-color-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .progress-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .progress-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-color-secondary);
+        }
+
+        #themeToggle {
+            background: var(--surface-color-light);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-color);
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        #themeToggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Start screen styles */
+        .start-screen {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .start-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .start-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+
+        .start-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-color-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: var(--button-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .quiz-info {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            border-radius: var(--button-radius);
+            background: var(--surface-color-light);
+            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(76, 175, 80, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .info-card-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .info-card-content {
+            color: var(--text-color-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Results screen styles */
+        .results-container {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--surface-color);
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .results-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .results-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .results-subtitle {
+            color: var(--text-color-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .score-display {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 2rem;
+        }
+
+        .score-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--surface-color-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 1/1; /* Maintain aspect ratio */
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border-radius: 50%;
+            background: var(--surface-color);
+            z-index: 1;
+        }
+
+        .score-value {
+            position: relative;
+            z-index: 2;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .score-text {
+            font-size: 1.2rem;
+            margin: 1rem 0 2rem;
+            color: var(--text-color);
+        }
+
+        .score-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .score-progress svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .score-progress circle {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transform-origin: center;
+            transform: scale(0.94);
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .result-stat {
+            background: var(--surface-color-light);
+            padding: 1.25rem;
+            border-radius: var(--button-radius);
+        }
+
+        .result-stat-value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .result-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .restart-button {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--button-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .restart-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: confetti-fall 5s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+
+            .quiz-header, .question-container, .progress-container {
+                padding: 1.5rem;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .option {
+                padding: 1rem;
+            }
+
+            .results-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <div class="quiz-header">
+            <div class="quiz-title">
+                <div class="quiz-title-icon">
+                    <i data-lucide="file-text"></i>
+                </div>
+                <span>Research Methodology</span>
+            </div>
+            <button id="themeToggle" aria-label="Toggle theme">
+                <i data-lucide="sun"></i>
+            </button>
+        </div>
+
+        <div id="quizContent">
+            <!-- Content will be loaded here -->
+        </div>
+
+        <div id="navigation" class="navigation" style="display: none;">
+            <button class="nav-button prev" id="prevButton" disabled>
+                <i data-lucide="chevron-left"></i>
+                Previous
+            </button>
+            <button class="nav-button next" id="nextButton">
+                Next
+                <i data-lucide="chevron-right"></i>
+            </button>
+        </div>
+
+        <div id="progressContainer" class="progress-container" style="display: none;">
+            <div class="progress-stats">
+                <div class="progress-stat">
+                    <div class="progress-stat-value" id="currentQuestionStat">0</div>
+                    <div class="progress-stat-label">Current</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-value" id="correctAnswersStat">0</div>
+                    <div class="progress-stat-label">Correct</div>
+                </div>
+                <div class="progress-stat">
+                    <div class="progress-stat-value" id="totalQuestionsStat">0</div>
+                    <div class="progress-stat-label">Total</div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text">
+                <span id="progressText">Question 1 of 40</span>
+                <span id="progressPercentage">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Made with by <a href="https://t.me/rewx_x" target="_blank">@rewx_x</a>
+    </footer>
+
+    <script>
+        // Quiz data
+        const quizData = {
+            questions: [
+                {
+                    question: "What is the purpose of a bibliographic record?",
+                    options: [
+                        "To list and locate documents",
+                        "To create fictional stories",
+                        "To entertain readers",
+                        "To analyze historical events"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Bibliographic records are created to list and locate documents in a library or information system."
+                },
+                {
+                    question: "Which of the following is NOT a field in a bibliographic record?",
+                    options: [
+                        "Title",
+                        "Author's date of birth",
+                        "ISBN",
+                        "Year publication date"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Author's date of birth is not typically included in a standard bibliographic record."
+                },
+                {
+                    question: "What does a bibliographic record serve to accomplish?",
+                    options: [
+                        "To organize documents in a library",
+                        "To validate expert opinions",
+                        "To provide access to digitized content",
+                        "To list and locate documents"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "The primary purpose of a bibliographic record is to list and locate documents."
+                },
+                {
+                    question: "Which of the following is NOT a field in a bibliographic record?",
+                    options: [
+                        "Publisher",
+                        "ISBN, ISSN",
+                        "Price",
+                        "Author"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Price is not typically included as a standard field in bibliographic records."
+                },
+                {
+                    question: "What is the purpose of a bibliographic record?",
+                    options: [
+                        "To list and locate documents",
+                        "To create fictional stories",
+                        "To entertain readers",
+                        "To analyze historical events"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Bibliographic records are created to list and locate documents in a library or information system."
+                },
+                {
+                    question: "Use Google to find documents about: \"Studying the influence of humidity and temperature in the propagation of covid-19 in China\" Which of the sets of keywords will you use?",
+                    options: [
+                        "Studying, influence, \"humidity and temperature\" propagation, covid-19, China",
+                        "Humidity, temperature, covid-19, China",
+                        "Studying, humidity, temperature, propagation, covid-19, China",
+                        "Other (please specify)"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Using the most essential keywords (humidity, temperature, covid-19, China) will yield the most relevant results without being too restrictive."
+                },
+                {
+                    question: "What is a document call number?",
+                    options: [
+                        "To classify the document in chronological order",
+                        "To help you find it on the library shelves",
+                        "To determine the colour of the document",
+                        "To indicate the size of the document"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "A call number is assigned to help locate the physical document on library shelves."
+                },
+                {
+                    question: "What do you call the most important words in a search?",
+                    options: [
+                        "Keywords",
+                        "Passwords",
+                        "Crosswords",
+                        "Arrow words"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Keywords are the most important words that represent the main concepts in a search query."
+                },
+                {
+                    question: "What does the abbreviation CCDZ stand for?",
+                    options: [
+                        "Catalogue for Central Documentation in Algeria",
+                        "Central Catalogue for Documented Zones",
+                        "Collective Catalogue from Algeria",
+                        "Catalogue for Collecting Digital Zones"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "CCDZ stands for Collective Catalogue from Algeria."
+                },
+                {
+                    question: "What does SNDL stand for?",
+                    options: [
+                        "System of National Documentation and Learning",
+                        "Scientific Network for Digital Libraries",
+                        "National System of on Line Documentation",
+                        "System for National Data Logging"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "SNDL stands for National System of on Line Documentation."
+                },
+                {
+                    question: "What are the disadvantages of natural language?",
+                    options: [
+                        "Insufficient precision",
+                        "Risk of noise",
+                        "Too general a subject",
+                        "Relevant answers"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Natural language often lacks precision when used for information retrieval."
+                },
+                {
+                    question: "Why is silence more annoying than noise in natural language?",
+                    options: [
+                        "Silence is less visible than noise.",
+                        "Silence is more frequent than noise in natural language.",
+                        "Receives a few answers but misses several relevant references.",
+                        "Silence is harder to understand than noise."
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Silence in search results means you receive few answers but miss many relevant references, which is more problematic than getting too many results (noise)."
+                },
+                {
+                    question: "Use Yahoo to find documents about: \"The impact of temperature and humidity on root fly survival\". Which keywords would you use?",
+                    options: [
+                        "Other...",
+                        "Impact, temperature, humidity, survival, root",
+                        "Impact, \"temperature, humidity\", \"root fly\"",
+                        "Temperature, humidity, \"root fly\""
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Using the essential keywords 'temperature', 'humidity', and the specific term 'root fly' in quotes will yield the most relevant results."
+                },
+                {
+                    question: "Why is silence more annoying than noise in natural language?",
+                    options: [
+                        "Silence is less visible than noise.",
+                        "Silence is more frequent than noise in natural language.",
+                        "Receives a few answers but misses several relevant references.",
+                        "Silence is harder to understand than noise."
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Silence in search results means you receive few answers but miss many relevant references, which is more problematic than getting too many results (noise)."
+                },
+                {
+                    question: "The following bibliographic reference: MARTIN Anne. Analyse qualitative des données d'enquête d'opinion. Études et résultats, 2007, vol. 73, no 2, pp. 241-260. ISSN 2-85206-854-0, is it:",
+                    options: [
+                        "A thesis",
+                        "A periodical article",
+                        "A dvd",
+                        "A book"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "This reference includes a journal title (Études et résultats), volume, issue number, and page numbers, indicating it is a periodical article."
+                },
+                {
+                    question: "To find a book by Charles Antoine, specialised in medical physics. What would be the best way to search the library catalogue?",
+                    options: [
+                        "Title",
+                        "Subject",
+                        "Other",
+                        "Author"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "When you know the author's name, searching by author is the most direct way to find their works."
+                },
+                {
+                    question: "The following document: SCRIBAN René. Biotechnologies. Paris. Lavoisier, 2023. ISBN is it:",
+                    options: [
+                        "A periodical article",
+                        "A thesis",
+                        "A monograph",
+                        "A periodical"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "This reference has an author, title, place of publication, publisher, and year, indicating it is a monograph (book)."
+                },
+                {
+                    question: "The following document, AGEZ Morgane. Structural and functional study of the chaperone protein. 261 p. PhD thesis. Biochemistry, Paris: P. & M. Curie University, Paris VI, 2008. is:",
+                    options: [
+                        "A book",
+                        "A thesis",
+                        "A periodical article",
+                        "A periodical"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "This reference explicitly states it is a PhD thesis, with the university and year of completion."
+                },
+                {
+                    question: "Which of the following is NOT a popular web browser?",
+                    options: [
+                        "Netscape",
+                        "Mozilla Firefox",
+                        "Google",
+                        "Opera"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Google is a search engine, not a web browser. Google Chrome is their browser product."
+                },
+                {
+                    question: "Search the library catalog using keywords \"mecanic cantic\". The computer doesn't find any documents. What do you conclude?",
+                    options: [
+                        "The keywords used are incorrect.",
+                        "The library has no documents.",
+                        "Documents on this subject are not available in the library.",
+                        "There is a problem with the library computer."
+                    ],
+                    correctAnswer: 0,
+                    explanation: "The most likely reason is that the keywords are misspelled or incorrect (should be 'mechanic' and 'quantum')."
+                },
+                {
+                    question: "What is a search engine?",
+                    options: [
+                        "A software that performs tasks on the internet",
+                        "A type of spider that crawls Web pages.",
+                        "A list of relevant web pages",
+                        "A tool for accessing Web pages"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "A search engine is a tool that helps users access web pages by finding relevant content based on search queries."
+                },
+                {
+                    question: "Which of the following is NOT a type of specialized search engine?",
+                    options: [
+                        "Baidu",
+                        "Fooooo",
+                        "Picsearch",
+                        "Google Images"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Fooooo is not a real specialized search engine, while the others are legitimate search tools."
+                },
+                {
+                    question: "Which of the following is a meta-search engine?",
+                    options: [
+                        "Bing",
+                        "Yahoo",
+                        "Google",
+                        "Dogpile"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Dogpile is a meta-search engine that aggregates results from multiple search engines."
+                },
+                {
+                    question: "Use Google to find documents about: \"Studying the influence of humidity and temperature in the propagation of covid-19 world\" Which of the sets of keywords will you use?",
+                    options: [
+                        "Studying, influence, \"humidity and temperature\" propagation, covid-19, world",
+                        "Humidity, temperature, covid-19",
+                        "Studying, humidity, temperature, propagation, covid-19, world",
+                        "Other (please specify)"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Using the essential keywords 'humidity', 'temperature', and 'covid-19' will yield the most relevant results without being too restrictive."
+                },
+                {
+                    question: "Which of the following searches would give you information about the films shown at the movie theatre Atlas in the evening?",
+                    options: [
+                        "films NOT Atlas AND tonight",
+                        "films NOT hall AND tonight",
+                        "films AND \"movie theatre Atlas\" AND tonight",
+                        "films OR \"movie theatre Atlas\" OR tonight"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Using AND operators with specific terms in quotes will narrow the search to exactly what you're looking for."
+                },
+                {
+                    question: "What are the quality criteria for presenting information found on the web?",
+                    options: [
+                        "The popularity of the presentation",
+                        "The origin of the presentation",
+                        "The size of the presentation",
+                        "The quality of the writing, readability and accessibility"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "The quality of writing, readability, and accessibility are key criteria for evaluating information presentation on the web."
+                },
+                {
+                    question: "Which type of source is more likely to have strict validation processes?",
+                    options: [
+                        "Formal sources",
+                        "None of the above",
+                        "Web 2.0 sources",
+                        "Informal sources"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "Formal sources typically have strict validation processes before publishing information."
+                },
+                {
+                    question: "What type of source publishes information without any control?",
+                    options: [
+                        "Social sources",
+                        "Formal sources",
+                        "Collective sources",
+                        "Informal sources"
+                    ],
+                    correctAnswer: 3,
+                    explanation: "Informal sources often publish information without formal editorial control or validation."
+                },
+                {
+                    question: "What is one reason to avoid quoting Wikipedia?",
+                    options: [
+                        "The content is too short and lacks depth",
+                        "The contributors may make mistakes.",
+                        "Authors do not always give sufficient credit to their sources",
+                        "The content is a compilation of sources from several authors"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Since Wikipedia can be edited by anyone, contributors may make mistakes, affecting the reliability of the information."
+                },
+                {
+                    question: "Why is it not advisable to cite Wikipedia?",
+                    options: [
+                        "The information contained in Wikipedia is reliable.",
+                        "Wikipedia does not have enough sources.",
+                        "Pages are constantly being modified, which increases the risk of inaccuracies.",
+                        "The articles are too long and difficult to read."
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Wikipedia pages are constantly being modified, which increases the risk of inaccuracies and makes it less reliable as a citable source."
+                },
+                {
+                    question: "Which of the following is an example of a primary document?",
+                    options: [
+                        "An encyclopaedia",
+                        "A dictionary",
+                        "A book",
+                        "A library catalogue"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "A book can be a primary document, while encyclopedias, dictionaries, and library catalogs are secondary or tertiary sources."
+                },
+                {
+                    question: "The query [intitle: electric guitar] returns, in a Google search:",
+                    options: [
+                        "all pages containing electric guitar in the title.",
+                        "all pages containing guitar and the word electric in the title.",
+                        "all pages containing guitar in the title and electric anywhere in the document.",
+                        "all pages containing guitar and electric side by side in the tag."
+                    ],
+                    correctAnswer: 0,
+                    explanation: "The intitle: operator in Google search returns pages that contain the specified terms in the title of the page."
+                },
+                {
+                    question: "Which of the following criteria can be used to assess the quality and relevance of the information contained in a book or periodical article?",
+                    options: [
+                        "Number of pages",
+                        "Clarity of presentation",
+                        "Accuracy of information",
+                        "Language and style"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Accuracy of information is a key criterion for assessing the quality and relevance of content in books or articles."
+                },
+                {
+                    question: "What is the criterion for assessing the quality of the information contained in a book?",
+                    options: [
+                        "Clarity of presentation",
+                        "Reputation of the author",
+                        "Number of pages",
+                        "Depth of analysis"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "The reputation of the author is an important criterion for assessing the quality of information in a book."
+                },
+                {
+                    question: "Which application gives access to web pages on the Internet?",
+                    options: [
+                        "Email",
+                        "Social media",
+                        "Web browser",
+                        "Search engine"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "A web browser is the application that gives users access to web pages on the Internet."
+                },
+                {
+                    question: "Which of the following is NOT a web browser?",
+                    options: [
+                        "Netscape",
+                        "Google",
+                        "Mozilla Firefox",
+                        "Opera"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Google is a search engine, not a web browser. Google Chrome is their browser product."
+                },
+                {
+                    question: "What is the most widely used web browser?",
+                    options: [
+                        "Google",
+                        "Google Chrome",
+                        "Yahoo",
+                        "You Tube"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Google Chrome is currently the most widely used web browser globally."
+                },
+                {
+                    question: "What is a benefit of using web directories?",
+                    options: [
+                        "They provide theoretical resources",
+                        "They are based on human selection",
+                        "They contain good quality resources",
+                        "They are populated with sub-headings"
+                    ],
+                    correctAnswer: 1,
+                    explanation: "Web directories are based on human selection and organization, which can lead to more curated results."
+                },
+                {
+                    question: "What determines the quality of a resource on the web?",
+                    options: [
+                        "The reliability of the information, the quality of the writing",
+                        "The quality of the presentation of the information, the quality of the writing",
+                        "The reliability of the information, the quality of its presentation",
+                        "The quality of the writing, the readability of the information"
+                    ],
+                    correctAnswer: 0,
+                    explanation: "The reliability of the information and the quality of the writing are key determinants of a web resource's quality."
+                },
+                {
+                    question: "What can the library catalogue do?",
+                    options: [
+                        "Consult newspaper articles",
+                        "Borrow books",
+                        "Search for a document and locate it",
+                        "Reserve documents"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The primary function of a library catalog is to help users search for and locate documents in the library's collection."
+                },
+                {
+                    question: "To find the book on quantum physics \"The Quantum World\". What would be the best way to search the library catalogue?",
+                    options: [
+                        "author",
+                        "subject",
+                        "title",
+                        "Other (please specify)"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "When you know the exact title of a book, searching by title is the most direct way to find it."
+                },
+                {
+                    question: "You search the library catalogue using the keywords \"mecaniq general\". No document is found by the computer. What do you deduce from this?",
+                    options: [
+                        "The computer has broken down.",
+                        "The library has no documents on this subject.",
+                        "The keywords used are misspelled.",
+                        "The search was carried out incorrectly."
+                    ],
+                    correctAnswer: 2,
+                    explanation: "The most likely reason is that the keywords are misspelled (should be 'mecanique generale' in French)."
+                },
+                {
+                    question: "What is the relevance of a resource?",
+                    options: [
+                        "The size of the resource",
+                        "The origin of the resource",
+                        "The match between its information content and the information need",
+                        "The popularity of the resource"
+                    ],
+                    correctAnswer: 2,
+                    explanation: "Relevance refers to how well a resource's information content matches the user's information need."
+                }
+            ]
+        };
+
+        // Quiz state
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let quizStarted = false;
+        let questionAttempted = []; // Track if a question has been attempted
+
+        // DOM elements
+        const quizContent = document.getElementById('quizContent');
+        const navigation = document.getElementById('navigation');
+        const progressContainer = document.getElementById('progressContainer');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const progressText = document.getElementById('progressText');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercentage = document.getElementById('progressPercentage');
+        const themeToggle = document.getElementById('themeToggle');
+        const currentQuestionStat = document.getElementById('currentQuestionStat');
+        const correctAnswersStat = document.getElementById('correctAnswersStat');
+        const totalQuestionsStat = document.getElementById('totalQuestionsStat');
+
+        // Show start screen
+        function showStartScreen() {
+            quizStarted = false;
+            navigation.style.display = 'none';
+            progressContainer.style.display = 'none';
+            
+            quizContent.innerHTML = `
+                <div class="start-screen">
+                    <h2 class="start-title">Research Methodology Quiz</h2>
+                    <p class="start-subtitle">Test your knowledge of bibliographic records, search techniques, and information literacy with this comprehensive quiz.</p>
+                    
+                    <button class="start-button" id="startButton">
+                        <i data-lucide="play"></i>
+                        Start Quiz
+                    </button>
+                    
+                    <div class="quiz-info">
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <i data-lucide="help-circle"></i>
+                            </div>
+                            <div class="info-card-title">${quizData.questions.length} Questions</div>
+                            <div class="info-card-content">Comprehensive assessment covering all aspects of research methodology.</div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <i data-lucide="book-open"></i>
+                            </div>
+                            <div class="info-card-title">Topics</div>
+                            <div class="info-card-content">Bibliographic records, search techniques, information evaluation, and web resources.</div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <i data-lucide="check-circle"></i>
+                            </div>
+                            <div class="info-card-title">Instant Feedback</div>
+                            <div class="info-card-content">Get immediate feedback and explanations for each answer.</div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-card-icon">
+                                <i data-lucide="award"></i>
+                            </div>
+                            <div class="info-card-title">Track Progress</div>
+                            <div class="info-card-content">Monitor your progress and see your score at the end of the quiz.</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add event listener to start button
+            document.getElementById('startButton').addEventListener('click', startQuiz);
+            
+            lucide.createIcons();
+        }
+
+        // Start quiz
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = Array(quizData.questions.length).fill(null);
+            questionAttempted = Array(quizData.questions.length).fill(false); // Initialize all questions as not attempted
+            quizStarted = true;
+            
+            navigation.style.display = 'flex';
+            progressContainer.style.display = 'flex';
+            
+            // Update stats
+            totalQuestionsStat.textContent = quizData.questions.length;
+            
+            loadQuestion(0);
+        }
+
+        // Load question
+        function loadQuestion(index) {
+            const question = quizData.questions[index];
+            
+            let optionsHTML = question.options.map((option, i) => {
+                const letter = String.fromCharCode(97 + i); // a, b, c, d
+                return `
+                    <div class="option" data-index="${i}">
+                        <span class="option-letter">${letter}</span>
+                        <span class="option-text">${option}</span>
+                    </div>
+                `;
+            }).join('');
+
+            quizContent.innerHTML = `
+                <div class="question-container">
+                    <div class="question-number">
+                        <div class="question-number-badge">${index + 1}</div>
+                        <span>Question ${index + 1} of ${quizData.questions.length}</span>
+                    </div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options-container">${optionsHTML}</div>
+                    <div class="feedback" id="feedback"></div>
+                    <div class="explanation" id="explanation">
+                        <div class="explanation-title">
+                            <i data-lucide="lightbulb"></i>
+                            Explanation
+                        </div>
+                        <div class="explanation-content">${question.explanation}</div>
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners to options if not answered yet
+            if (userAnswers[index] === null && !questionAttempted[index]) {
+                document.querySelectorAll('.option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        selectOption(parseInt(option.dataset.index));
+                    });
+                });
+            } else {
+                // Show previous answer
+                const selectedOption = document.querySelector(`.option[data-index="${userAnswers[index]}"]`);
+                const isCorrect = userAnswers[index] === question.correctAnswer;
+                
+                if (selectedOption) {
+                    selectedOption.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+                
+                // Show correct answer if wrong
+                if (!isCorrect) {
+                    document.querySelector(`.option[data-index="${question.correctAnswer}"]`).classList.add('correct');
+                }
+                
+                // Show feedback
+                const feedback = document.getElementById('feedback');
+                feedback.innerHTML = isCorrect ? 
+                    `<div class="feedback-icon"><i data-lucide="check"></i></div> Correct!` : 
+                    `<div class="feedback-icon"><i data-lucide="x"></i></div> Incorrect!`;
+                feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                // Show explanation
+                document.getElementById('explanation').classList.add('visible');
+                
+                // Disable all options since this question has been attempted
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                });
+            }
+
+            // Update navigation buttons
+            prevButton.disabled = index === 0;
+            nextButton.textContent = index === quizData.questions.length - 1 ? "Show Results" : "Next";
+            if (index === quizData.questions.length - 1) {
+                nextButton.innerHTML = `Show Results <i data-lucide="award"></i>`;
+            } else {
+                nextButton.innerHTML = `Next <i data-lucide="chevron-right"></i>`;
+            }
+            
+            // Update progress
+            progressText.textContent = `Question ${index + 1} of ${quizData.questions.length}`;
+            const progress = ((index + 1) / quizData.questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${Math.round(progress)}%`;
+            
+            // Update stats
+            currentQuestionStat.textContent = index + 1;
+            correctAnswersStat.textContent = score;
+            
+            lucide.createIcons();
+        }
+
+        // Select option
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            const explanation = document.getElementById('explanation');
+            const question = quizData.questions[currentQuestion];
+            
+            // Only process the selection if this question hasn't been attempted yet
+            if (!questionAttempted[currentQuestion]) {
+                // Mark this question as attempted
+                questionAttempted[currentQuestion] = true;
+                
+                // Disable all options
+                options.forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                });
+                
+                // Store user's answer
+                userAnswers[currentQuestion] = index;
+                
+                // Check answer
+                const isCorrect = index === question.correctAnswer;
+                if (isCorrect) {
+                    score++;
+                    correctAnswersStat.textContent = score;
+                }
+                
+                // Show feedback with animation
+                feedback.innerHTML = isCorrect ? 
+                    `<div class="feedback-icon"><i data-lucide="check"></i></div> Correct!` : 
+                    `<div class="feedback-icon"><i data-lucide="x"></i></div> Incorrect!`;
+                feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                // Mark selected option
+                const selectedOption = document.querySelector(`.option[data-index="${index}"]`);
+                selectedOption.classList.add(isCorrect ? 'correct' : 'incorrect');
+                
+                // Show correct answer if wrong
+                if (!isCorrect) {
+                    document.querySelector(`.option[data-index="${question.correctAnswer}"]`).classList.add('correct');
+                }
+                
+                // Show explanation
+                explanation.classList.add('visible');
+                
+                lucide.createIcons();
+            }
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const confettiCount = 100;
+            const colors = ['#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107'];
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Show results
+        function showResults() {
+            const totalQuestions = quizData.questions.length;
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            quizContent.innerHTML = `
+                <div class="results-container">
+                    <h2 class="results-title">Quiz Results</h2>
+                    <p class="results-subtitle">You've completed the Research Methodology Quiz!</p>
+                    
+                    <div class="score-display">
+                        <div class="score-circle">
+                            <div class="score-value">${percentage}%</div>
+                        </div>
+                        <div class="score-progress">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" stroke-dasharray="${percentage * 2.83}, 283" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <p class="score-text">You answered ${score} out of ${totalQuestions} questions correctly</p>
+                    
+                    <div class="results-stats">
+                        <div class="result-stat">
+                            <div class="result-stat-value">${totalQuestions}</div>
+                            <div class="result-stat-label">Total Questions</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value">${score}</div>
+                            <div class="result-stat-label">Correct Answers</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value">${totalQuestions - score}</div>
+                            <div class="result-stat-label">Incorrect Answers</div>
+                        </div>
+                    </div>
+                    
+                    <button class="restart-button" id="restartButton">
+                        <i data-lucide="refresh-cw"></i>
+                        Take Quiz Again
+                    </button>
+                </div>
+            `;
+
+            // Hide navigation
+            navigation.style.display = 'none';
+            progressContainer.style.display = 'none';
+
+            // Add event listeners
+            document.getElementById('restartButton').addEventListener('click', startQuiz);
+            
+            // Create confetti effect if score is good
+            if (percentage >= 70) {
+                createConfetti();
+            }
+            
+            lucide.createIcons();
+        }
+
+        // Navigation
+        prevButton.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentQuestion < quizData.questions.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        });
+
+        // Theme toggle
+        function updateThemeIcon() {
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('light-mode')) {
+                icon.setAttribute('data-lucide', 'moon');
+            } else {
+                icon.setAttribute('data-lucide', 'sun');
+            }
+            lucide.createIcons();
+        }
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            updateThemeIcon();
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        // Initialize - Apply stored theme or default to dark
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        } else {
+            document.body.classList.remove('light-mode');
+        }
+
+        updateThemeIcon();
+
+        // Initialize the quiz with start screen
+        showStartScreen();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
