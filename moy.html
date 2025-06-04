@@ -322,6 +322,13 @@
             padding: 20px;
             border: 1px solid var(--border-color);
             margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .subject-group.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            background: var(--bg-secondary);
         }
 
         .subject-title {
@@ -367,6 +374,12 @@
             outline: none;
             border-color: var(--border-focus);
             box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.1);
+        }
+
+        .input-group input:disabled {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            cursor: not-allowed;
         }
 
         /* Language Options */
@@ -1398,16 +1411,6 @@
                     </div>
                 </div>
 
-                <div class="subject-group">
-                    <div class="subject-title">الأخلاق والآداب المهنية (معامل 1)</div>
-                    <div class="subject-inputs single">
-                        <div class="input-group">
-                            <label>النقطة</label>
-                            <input type="number" id="disc_ethics" min="0" max="20" step="0.25" placeholder="0.00">
-                        </div>
-                    </div>
-                </div>
-
                 <button type="button" class="btn btn-primary" onclick="calculateUnitAverage('discovery')">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
@@ -1418,8 +1421,43 @@
 
             <!-- Transversal Unit Form -->
             <form id="transversalForm" class="unit-form">
-                <div class="subject-group">
-                    <div class="subject-title">الإنجليزية (معامل 1)</div>
+                <!-- Language Options for Units -->
+                <div class="language-options">
+                    <h3 style="margin-bottom: 15px; color: var(--text-primary);">خيارات اللغات الأجنبية:</h3>
+                    
+                    <div class="language-option">
+                        <div class="checkbox-wrapper">
+                            <div class="custom-checkbox">
+                                <input type="radio" name="unitLanguageOption" id="unitBothLanguagesRadio" value="both" checked>
+                                <div class="checkmark"></div>
+                            </div>
+                            <label for="unitBothLanguagesRadio">أدرس لغتين أجنبيتين (إنجليزية + فرنسية) - معامل 1 لكل لغة</label>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option">
+                        <div class="checkbox-wrapper">
+                            <div class="custom-checkbox">
+                                <input type="radio" name="unitLanguageOption" id="unitEnglishOnlyRadio" value="english">
+                                <div class="checkmark"></div>
+                            </div>
+                            <label for="unitEnglishOnlyRadio">أدرس الإنجليزية فقط - معامل 2</label>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option">
+                        <div class="checkbox-wrapper">
+                            <div class="custom-checkbox">
+                                <input type="radio" name="unitLanguageOption" id="unitFrenchOnlyRadio" value="french">
+                                <div class="checkmark"></div>
+                            </div>
+                            <label for="unitFrenchOnlyRadio">أدرس الفرنسية فقط - معامل 2</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subject-group" id="unitEnglishGroup">
+                    <div class="subject-title">الإنجليزية</div>
                     <div class="subject-inputs single">
                         <div class="input-group">
                             <label>النقطة</label>
@@ -1428,8 +1466,8 @@
                     </div>
                 </div>
 
-                <div class="subject-group">
-                    <div class="subject-title">الفرنسية (معامل 1)</div>
+                <div class="subject-group" id="unitFrenchGroup">
+                    <div class="subject-title">الفرنسية (ethics)</div>
                     <div class="subject-inputs single">
                         <div class="input-group">
                             <label>النقطة</label>
@@ -1440,7 +1478,6 @@
 
                 <button type="button" class="btn btn-primary" onclick="calculateUnitAverage('transversal')">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
                     </svg>
                     حساب معدل الوحدة الأفقية
@@ -1498,6 +1535,7 @@
             setupThemeToggle();
             setupUnitSelector();
             setupLanguageOptions();
+            setupUnitLanguageOptions();
             loadSavedData();
             setupAnimations();
         });
@@ -1554,7 +1592,7 @@
             });
         }
 
-        // Language Options Setup
+        // Language Options Setup for S2
         function setupLanguageOptions() {
             const languageRadios = document.querySelectorAll('input[name="languageOption"]');
             
@@ -1564,6 +1602,54 @@
                     localStorage.setItem('languageOption', this.value);
                 });
             });
+        }
+
+        // Language Options Setup for Units
+        function setupUnitLanguageOptions() {
+            const unitLanguageRadios = document.querySelectorAll('input[name="unitLanguageOption"]');
+            
+            unitLanguageRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateUnitLanguageFields(this.value);
+                    // Save the selected unit language option
+                    localStorage.setItem('unitLanguageOption', this.value);
+                });
+            });
+        }
+
+        // Update Unit Language Fields
+        function updateUnitLanguageFields(option) {
+            const englishGroup = document.getElementById('unitEnglishGroup');
+            const frenchGroup = document.getElementById('unitFrenchGroup');
+            const englishInput = document.getElementById('trans_english');
+            const frenchInput = document.getElementById('trans_french');
+
+            switch(option) {
+                case 'english':
+                    // Show English only, hide French
+                    englishGroup.classList.remove('disabled');
+                    frenchGroup.classList.add('disabled');
+                    englishInput.disabled = false;
+                    frenchInput.disabled = true;
+                    frenchInput.value = '';
+                    break;
+                case 'french':
+                    // Show French only, hide English
+                    frenchGroup.classList.remove('disabled');
+                    englishGroup.classList.add('disabled');
+                    frenchInput.disabled = false;
+                    englishInput.disabled = true;
+                    englishInput.value = '';
+                    break;
+                case 'both':
+                default:
+                    // Show both languages
+                    englishGroup.classList.remove('disabled');
+                    frenchGroup.classList.remove('disabled');
+                    englishInput.disabled = false;
+                    frenchInput.disabled = false;
+                    break;
+            }
         }
 
         // Theme Toggle Setup
@@ -1623,11 +1709,19 @@
                 }
             });
 
-            // Load language option
+            // Load language option for S2
             const savedLanguageOption = localStorage.getItem('languageOption') || 'both';
             const languageRadio = document.querySelector(`input[name="languageOption"][value="${savedLanguageOption}"]`);
             if (languageRadio) {
                 languageRadio.checked = true;
+            }
+
+            // Load unit language option
+            const savedUnitLanguageOption = localStorage.getItem('unitLanguageOption') || 'both';
+            const unitLanguageRadio = document.querySelector(`input[name="unitLanguageOption"][value="${savedUnitLanguageOption}"]`);
+            if (unitLanguageRadio) {
+                unitLanguageRadio.checked = true;
+                updateUnitLanguageFields(savedUnitLanguageOption);
             }
 
             updateYearSummary();
@@ -1959,7 +2053,7 @@
 
             // Calculate year average and total credits
             yearAverage = (s1Average + s2Average) / 2;
-            const totalYearCredits = (s1Credits + s2Credits) / 2;
+            const totalYearCredits = s1Credits + s2Credits;
 
             // Update result display
             const resultValue = document.getElementById("yearResultValue");
@@ -1997,7 +2091,7 @@
                     <div class="table-value ${yearAverage >= 10 ? 'text-success' : 'text-danger'}">
                         ${yearAverage >= 10 ? 'ناجح' : 'راسب'}
                     </div>
-                    <div class="table-value">${totalYearCredits.toFixed(1)}</div>
+                    <div class="table-value">${Math.round(totalYearCredits)}</div>
                     <div class="table-value ${colorClass}">${yearAverage.toFixed(2)}</div>
                     <div class="module-name" style="color: var(--primary-color); font-weight: 600;">معدل السنة</div>
                 </div>
@@ -2006,7 +2100,7 @@
             showNotification('تم حساب معدل السنة بنجاح!');
         }
 
-        // Calculate Unit Average - CORRECTED LOGIC
+        // Calculate Unit Average - UPDATED WITH LANGUAGE OPTIONS
         function calculateUnitAverage(unitType) {
             const getValue = (id) => parseFloat(document.getElementById(id).value) || 0;
             let unitAverage = 0;
@@ -2060,34 +2154,56 @@
                     
                 case 'discovery':
                     const mst = getValue("disc_mst");
-                    const ethics = getValue("disc_ethics");
-                    
+
                     modules = [
-                        { name: 'MST', grade: mst, coef: 1, credit: 1 },
-                        { name: 'الأخلاق والآداب المهنية', grade: ethics, coef: 1, credit: 1 }
+                        { name: 'MST', grade: mst, coef: 1, credit: 1 }
                     ];
-                    
-                    totalCoefficients = 1 + 1; // 2
-                    weightedSum = (mst * 1) + (ethics * 1);
+
+                    totalCoefficients = 1;
+                    weightedSum = mst;
                     unitAverage = weightedSum / totalCoefficients;
                     unitName = 'الوحدة الاستكشافية';
-                    totalCredits = 2;
+                    totalCredits = 1;
                     break;
-                    
+                      
                 case 'transversal':
+                    // Get selected unit language option
+                    const unitLanguageOption = document.querySelector('input[name="unitLanguageOption"]:checked').value;
+                    
                     const english = getValue("trans_english");
                     const french = getValue("trans_french");
-                    
-                    modules = [
-                        { name: 'الإنجليزية', grade: english, coef: 1, credit: 1 },
-                        { name: 'الفرنسية', grade: french, coef: 1, credit: 1 }
-                    ];
-                    
-                    totalCoefficients = 1 + 1; // 2
-                    weightedSum = (english * 1) + (french * 1);
+
+                    modules = [];
+                    totalCoefficients = 0;
+                    weightedSum = 0;
+                    totalCredits = 0;
+
+                    if (unitLanguageOption === 'both') {
+                        modules = [
+                            { name: 'الإنجليزية', grade: english, coef: 1, credit: 1 },
+                            { name: 'الفرنسية (ethics)', grade: french, coef: 1, credit: 1 }
+                        ];
+                        totalCoefficients = 2;
+                        weightedSum = english + french;
+                        totalCredits = 2;
+                    } else if (unitLanguageOption === 'english') {
+                        modules = [
+                            { name: 'الإنجليزية', grade: english, coef: 2, credit: 2 }
+                        ];
+                        totalCoefficients = 2;
+                        weightedSum = english * 2;
+                        totalCredits = 2;
+                    } else if (unitLanguageOption === 'french') {
+                        modules = [
+                            { name: 'الفرنسية (ethics)', grade: french, coef: 2, credit: 2 }
+                        ];
+                        totalCoefficients = 2;
+                        weightedSum = french * 2;
+                        totalCredits = 2;
+                    }
+
                     unitAverage = weightedSum / totalCoefficients;
                     unitName = 'الوحدة الأفقية';
-                    totalCredits = 2;
                     break;
             }
 
@@ -2212,6 +2328,10 @@
                 localStorage.setItem(input.id, input.value);
             });
 
+            // Save unit language option
+            const unitLanguageOption = document.querySelector('input[name="unitLanguageOption"]:checked').value;
+            localStorage.setItem('unitLanguageOption', unitLanguageOption);
+
             showNotification('تم حفظ نقاط الوحدات بنجاح!');
         }
 
@@ -2260,7 +2380,13 @@
                 inputs.forEach(input => {
                     localStorage.removeItem(input.id);
                     input.value = '';
+                    input.disabled = false; // Re-enable all inputs
                 });
+
+                // Reset language option to both
+                document.querySelector('input[name="unitLanguageOption"][value="both"]').checked = true;
+                localStorage.removeItem('unitLanguageOption');
+                updateUnitLanguageFields('both');
 
                 // Reset result
                 document.getElementById('unitResultValue').textContent = '--';
