@@ -264,6 +264,10 @@
             overflow: hidden;
         }
 
+        .grade-input-group.hidden {
+            display: none;
+        }
+
         .grade-input-group::before {
             content: '';
             position: absolute;
@@ -315,6 +319,13 @@
             box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
         }
 
+        .grade-input:disabled {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
         /* Subject Group for Units */
         .subject-group {
             background: var(--bg-input);
@@ -327,7 +338,7 @@
 
         .subject-group.disabled {
             opacity: 0.5;
-            pointer-events: none;
+            default-events: none;
             background: var(--bg-secondary);
         }
 
@@ -1087,6 +1098,40 @@
         <div id="s2Container" class="calculator-container">
             <h2 class="section-title">حساب معدل الفصل الثاني</h2>
             <form id="s2Form">
+                <div class="language-options">
+                    <h3 style="margin-bottom: 15px; color: var(--text-primary);">خيارات اللغات الأجنبية:</h3>
+                    
+                    <div class="language-option">
+                        <div class="checkbox-wrapper">
+                            <div class="custom-checkbox">
+                                <input type="radio" name="languageOption" id="bothLanguagesRadio" value="both" checked>
+                                <div class="checkmark"></div>
+                            </div>
+                            <label for="bothLanguagesRadio">أدرس لغتين أجنبيتين (إنجليزية + فرنسية) - معامل 1 لكل لغة</label>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option">
+                        <div class="checkbox-wrapper">
+                            <div class="custom-checkbox">
+                                <input type="radio" name="languageOption" id="englishOnlyRadio" value="english">
+                                <div class="checkmark"></div>
+                            </div>
+                            <label for="englishOnlyRadio">أدرس الإنجليزية فقط - معامل 2</label>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option">
+                        <div class="checkbox-wrapper">
+                            <div class="custom-checkbox">
+                                <input type="radio" name="languageOption" id="frenchOnlyRadio" value="french">
+                                <div class="checkmark"></div>
+                            </div>
+                            <label for="frenchOnlyRadio">أدرس الفرنسية فقط - معامل 2</label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grades-grid">
                     <div class="grade-input-group">
                         <label class="input-label">MATH (TD)</label>
@@ -1132,7 +1177,7 @@
                         <label class="input-label">MST</label>
                         <input type="number" class="grade-input" id="s2_mst" min="0" max="20" step="0.25" placeholder="0.00">
                     </div>
-                    <div class="grade-input-group">
+                    <div class="grade-input-group" id="s2FrenchGroup">
                         <label class="input-label">français</label>
                         <input type="number" class="grade-input" id="s2_french" min="0" max="20" step="0.25" placeholder="0.00">
                     </div>
@@ -1140,43 +1185,9 @@
                         <label class="input-label">METHODOLOGY</label>
                         <input type="number" class="grade-input" id="s2_methodology" min="0" max="20" step="0.25" placeholder="0.00">
                     </div>
-                    <div class="grade-input-group">
+                    <div class="grade-input-group" id="s2EnglishGroup">
                         <label class="input-label">ENGLISH</label>
                         <input type="number" class="grade-input" id="s2_english" min="0" max="20" step="0.25" placeholder="0.00">
-                    </div>
-                </div>
-
-                <div class="language-options">
-                    <h3 style="margin-bottom: 15px; color: var(--text-primary);">خيارات اللغات الأجنبية:</h3>
-                    
-                    <div class="language-option">
-                        <div class="checkbox-wrapper">
-                            <div class="custom-checkbox">
-                                <input type="radio" name="languageOption" id="bothLanguagesRadio" value="both" checked>
-                                <div class="checkmark"></div>
-                            </div>
-                            <label for="bothLanguagesRadio">أدرس لغتين أجنبيتين (إنجليزية + فرنسية) - معامل 1 لكل لغة</label>
-                        </div>
-                    </div>
-                    
-                    <div class="language-option">
-                        <div class="checkbox-wrapper">
-                            <div class="custom-checkbox">
-                                <input type="radio" name="languageOption" id="englishOnlyRadio" value="english">
-                                <div class="checkmark"></div>
-                            </div>
-                            <label for="englishOnlyRadio">أدرس الإنجليزية فقط - معامل 2</label>
-                        </div>
-                    </div>
-                    
-                    <div class="language-option">
-                        <div class="checkbox-wrapper">
-                            <div class="custom-checkbox">
-                                <input type="radio" name="languageOption" id="frenchOnlyRadio" value="french">
-                                <div class="checkmark"></div>
-                            </div>
-                            <label for="frenchOnlyRadio">أدرس الفرنسية فقط - معامل 2</label>
-                        </div>
                     </div>
                 </div>
 
@@ -1598,10 +1609,46 @@
             
             languageRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
+                    updateS2LanguageFields(this.value);
                     // Save the selected language option
                     localStorage.setItem('languageOption', this.value);
                 });
             });
+        }
+
+        // Update S2 Language Fields
+        function updateS2LanguageFields(option) {
+            const englishGroup = document.getElementById('s2EnglishGroup');
+            const frenchGroup = document.getElementById('s2FrenchGroup');
+            const englishInput = document.getElementById('s2_english');
+            const frenchInput = document.getElementById('s2_french');
+
+            switch(option) {
+                case 'english':
+                    // Show English only, hide French
+                    englishGroup.classList.remove('hidden');
+                    frenchGroup.classList.add('hidden');
+                    englishInput.disabled = false;
+                    frenchInput.disabled = true;
+                    frenchInput.value = '';
+                    break;
+                case 'french':
+                    // Show French only, hide English
+                    frenchGroup.classList.remove('hidden');
+                    englishGroup.classList.add('hidden');
+                    frenchInput.disabled = false;
+                    englishInput.disabled = true;
+                    englishInput.value = '';
+                    break;
+                case 'both':
+                default:
+                    // Show both languages
+                    englishGroup.classList.remove('hidden');
+                    frenchGroup.classList.remove('hidden');
+                    englishInput.disabled = false;
+                    frenchInput.disabled = false;
+                    break;
+            }
         }
 
         // Language Options Setup for Units
@@ -1714,6 +1761,7 @@
             const languageRadio = document.querySelector(`input[name="languageOption"][value="${savedLanguageOption}"]`);
             if (languageRadio) {
                 languageRadio.checked = true;
+                updateS2LanguageFields(savedLanguageOption);
             }
 
             // Load unit language option
@@ -1865,7 +1913,7 @@
             showNotification('تم حساب معدل الفصل الأول بنجاح!');
         }
 
-        // Calculate S2 Average
+        // Calculate S2 Average - FIXED VERSION
         function calculateS2Average() {
             const getValue = (id) => parseFloat(document.getElementById(id).value) || 0;
 
@@ -2357,6 +2405,7 @@
                 if (prefix === 's2') {
                     document.querySelector('input[name="languageOption"][value="both"]').checked = true;
                     localStorage.removeItem('languageOption');
+                    updateS2LanguageFields('both');
                 }
 
                 // Reset stored averages and credits
