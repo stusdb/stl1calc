@@ -51,6 +51,7 @@
             text-align: center;
             font-size: 1.5rem;
             font-weight: bold;
+            line-height: 1.6;
         }
         .btn-calc {
             width: 100%;
@@ -63,8 +64,9 @@
             cursor: pointer;
             font-size: 1.1rem;
             margin-bottom: 20px;
+            transition: 0.3s;
         }
-        .btn-calc:hover { opacity: 0.9; }
+        .btn-calc:hover { opacity: 0.9; transform: scale(0.99); }
     </style>
 </head>
 <body>
@@ -82,6 +84,7 @@
             </tr>
         </thead>
         <tbody id="subjectsBody">
+            <!-- Coefficient 2 Modules -->
             <tr data-type="mix" data-coef="2">
                 <td>Fluid Mech</td>
                 <td><input type="number" class="td-input" placeholder="0-20"></td>
@@ -107,6 +110,7 @@
                 <td>2</td>
             </tr>
             
+            <!-- Coefficient 3 Module -->
             <tr data-type="mix" data-coef="3">
                 <td>Math 3</td>
                 <td><input type="number" class="td-input" placeholder="0-20"></td>
@@ -114,6 +118,7 @@
                 <td>3</td>
             </tr>
 
+            <!-- Coefficient 1 Modules (TP Only) -->
             <tr data-type="tp-only" data-coef="1">
                 <td>Waves TP</td>
                 <td><input type="number" class="td-input" placeholder="TP"></td>
@@ -133,6 +138,7 @@
                 <td>1</td>
             </tr>
 
+            <!-- Coefficient 1 Modules (Exam Only) -->
             <tr data-type="exam-only" data-coef="1">
                 <td>Tech English</td>
                 <td>-</td>
@@ -164,8 +170,8 @@
 <script>
     function calculate() {
         const rows = document.querySelectorAll('#subjectsBody tr');
-        let totalPoints = 0;
-        let totalCoef = 0;
+        let totalWeightedPoints = 0; // مجموع (معدل المادة × معاملها)
+        let totalCoefficients = 0;
 
         rows.forEach(row => {
             const type = row.getAttribute('data-type');
@@ -173,28 +179,29 @@
             const td = parseFloat(row.querySelector('.td-input')?.value) || 0;
             const exam = parseFloat(row.querySelector('.exam-input')?.value) || 0;
             
-            let subjectAvg = 0;
+            let subjectAverage = 0;
 
             if (type === 'mix') {
-                // (TD × 0.4 + Exam × 0.6)
-                subjectAvg = (td * 0.4) + (exam * 0.6);
+                // Formula: (TD × 0.4 + Exam × 0.6)
+                subjectAverage = (td * 0.4) + (exam * 0.6);
             } else if (type === 'tp-only') {
-                // TP × 1
-                subjectAvg = td;
+                // Formula: TP point itself
+                subjectAverage = td;
             } else if (type === 'exam-only') {
-                // Exam × 1
-                subjectAvg = exam;
+                // Formula: Exam point itself
+                subjectAverage = exam;
             }
 
-            totalPoints += (subjectAvg * coef);
-            totalCoef += coef;
+            // Points = Subject Average * Coefficient
+            totalWeightedPoints += (subjectAverage * coef);
+            totalCoefficients += coef;
         });
 
-        const finalAverage = totalPoints / totalCoef;
+        const finalSemesterAverage = totalCoefficients > 0 ? (totalWeightedPoints / totalCoefficients) : 0;
         
         document.getElementById('result').innerHTML = `
-            مجموع النقاط: ${totalPoints.toFixed(2)} <br>
-            المعدل السداسي: ${finalAverage.toFixed(2)}
+            مجموع النقاط: ${totalWeightedPoints.toFixed(2)} <br>
+            المعدل السداسي: ${finalSemesterAverage.toFixed(2)}
         `;
     }
 </script>
